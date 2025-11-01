@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARPOL Waste Management System</title>
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18",
+            "react-dom/client": "https://esm.sh/react-dom@18/client",
+            "react-router-dom": "https://esm.sh/react-router-dom",
+            "three": "https://esm.sh/three",
+            "@react-three/fiber": "https://esm.sh/@react-three/fiber",
+            "@react-three/drei": "https://esm.sh/@react-three/drei"
+        }
+    }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        #root {
+            min-height: 100vh;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div class="loading">
+            Loading MARPOL Application...
+        </div>
+    </div>
+
+    <script type="module">
+        import React from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { BrowserRouter, Routes, Route } from 'react-router-dom';
+        
+        // Import your existing components
+        const modules = {};
+        
+        // Dynamic import function
+        async function loadComponent(componentPath) {
+            if (!modules[componentPath]) {
+                try {
+                    const module = await import(componentPath);
+                    modules[componentPath] = module.default || module;
+                } catch (error) {
+                    console.error('Failed to load component:', componentPath, error);
+                    return () => React.createElement('div', null, `Failed to load ${componentPath}`);
+                }
+            }
+            return modules[componentPath];
+        }
+        
+        // Lazy loaded components
+        const Header = React.lazy(() => loadComponent('./app/components/layout/Header.js'));
+        const Dashboard = React.lazy(() => loadComponent('./app/pages/dashboard/Dashboard.js'));
+        const MainForm = React.lazy(() => loadComponent('./app/pages/forms/MainForm.js'));
+        const Reports = React.lazy(() => loadComponent('./app/pages/reports/Reports.js'));
+        
+        function App() {
+            return React.createElement(
+                BrowserRouter,
+                null,
+                React.createElement(
+                    React.Suspense,
+                    { 
+                        fallback: React.createElement('div', { className: 'loading' }, 'Loading MARPOL Application...') 
+                    },
+                    React.createElement(
+                        Routes,
+                        null,
+                        React.createElement(Route, { 
+                            path: '/', 
+                            element: React.createElement(
+                                React.Fragment,
+                                null,
+                                React.createElement(Header),
+                                React.createElement(Dashboard)
+                            )
+                        }),
+                        React.createElement(Route, { 
+                            path: '/forms', 
+                            element: React.createElement(
+                                React.Fragment,
+                                null,
+                                React.createElement(Header),
+                                React.createElement(MainForm)
+                            )
+                        }),
+                        React.createElement(Route, { 
+                            path: '/reports', 
+                            element: React.createElement(
+                                React.Fragment,
+                                null,
+                                React.createElement(Header),
+                                React.createElement(Reports)
+                            )
+                        })
+                    )
+                )
+            );
+        }
+        
+        const root = createRoot(document.getElementById('root'));
+        root.render(React.createElement(App));
+    </script>
+</body>
+</html>
