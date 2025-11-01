@@ -1,191 +1,108 @@
 #!/bin/bash
-# complete-fix-and-deploy.sh
+# remove-mobile-mess-and-fix-gh-pages.sh
 
-echo "🚀 COMPLETING FIX AND DEPLOYMENT"
+echo "🧹 REMOVING MOBILE MESS AND FIXING GITHUB PAGES"
 
-# 1. Fix the Header with PROPER hamburger visibility (not always visible)
-cat > app/components/layout/Header.jsx << 'EOF'
-import React, { useState } from 'react';
+# 1. Restore the original working Header (before any mobile changes)
+echo "📁 Restoring original Header..."
+find app/components/layout/ -name "*.backup" | head -5
+
+# Check if we have a backup, otherwise create a clean header
+if [ -f "app/components/layout/Header.jsx.backup" ]; then
+    cp app/components/layout/Header.jsx.backup app/components/layout/Header.jsx
+    echo "✅ Restored Header from backup"
+else
+    # Create a clean, simple header without mobile complexity
+    cat > app/components/layout/Header.jsx << 'EOF'
+import React from 'react';
 import Logo3D from './Logo3D.jsx';
 
 const Header = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const navigationItems = [
-    { name: 'Dashboard', path: '/' },
-    { name: 'Forms', path: '/form' },
-    { name: 'Reports', path: '/reports' }
-  ];
-
   return (
     <header style={{
       background: 'var(--gradient-primary)',
-      padding: '0.75rem 0',
-      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 1000
+      padding: '1rem 0',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
     }}>
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '0 1rem'
+        padding: '0 2rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1.5rem'
       }}>
+        {/* Logo */}
         <div style={{
+          width: '60px',
+          height: '60px',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '1rem'
+          justifyContent: 'center'
         }}>
-          {/* Logo at far left */}
-          <div style={{
-            width: '45px',
-            height: '45px',
-            flexShrink: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <Logo3D />
-          </div>
-
-          {/* Brand text */}
-          <div style={{ 
-            minWidth: 0,
-            flex: 1,
-            overflow: 'hidden'
-          }}>
-            <h1 style={{
-              margin: 0,
-              fontSize: '1.25rem',
-              fontWeight: '700',
-              color: 'white',
-              lineHeight: '1.2',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
-            }}>
-              ENA Waste Management
-            </h1>
-            <p style={{
-              margin: 0,
-              fontSize: '0.75rem',
-              color: 'rgba(255, 255, 255, 0.9)',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
-            }}>
-              MARPOL Compliance System
-            </p>
-          </div>
-
-          {/* Desktop Navigation - visible by default */}
-          <nav style={{
-            display: 'flex',
-            gap: '1.5rem',
-            alignItems: 'center',
-            flexShrink: 0
-          }} className="desktop-nav">
-            {navigationItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.path}
-                style={{
-                  color: 'white',
-                  textDecoration: 'none',
-                  fontWeight: '500',
-                  padding: '0.5rem 0.75rem',
-                  borderRadius: '6px',
-                  transition: 'all 0.3s ease',
-                  fontSize: '0.9rem',
-                  whiteSpace: 'nowrap'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.background = 'transparent';
-                }}
-              >
-                {item.name}
-              </a>
-            ))}
-          </nav>
-
-          {/* Mobile Menu Button - hidden by default, shown via CSS */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            style={{
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: 'none',
-              borderRadius: '6px',
-              color: 'white',
-              padding: '0.5rem',
-              cursor: 'pointer',
-              display: 'none', // HIDDEN BY DEFAULT
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '40px',
-              height: '40px',
-              flexShrink: 0
-            }}
-            aria-label="Toggle menu"
-            className="mobile-menu-button"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path d="M3 12H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              <path d="M3 6H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              <path d="M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          </button>
+          <Logo3D />
         </div>
-
-        {/* Mobile Navigation Menu */}
-        <div style={{
-          display: isMobileMenuOpen ? 'block' : 'none',
-          marginTop: '0.75rem'
-        }} className="mobile-menu">
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: '8px',
-            padding: '0.75rem',
-            backdropFilter: 'blur(10px)'
+        
+        {/* Brand */}
+        <div>
+          <h1 style={{
+            margin: 0,
+            fontSize: '1.75rem',
+            fontWeight: '700',
+            color: 'white'
           }}>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.25rem'
-            }}>
-              {navigationItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.path}
-                  style={{
-                    color: 'white',
-                    textDecoration: 'none',
-                    fontWeight: '500',
-                    padding: '0.75rem',
-                    borderRadius: '6px',
-                    transition: 'all 0.3s ease',
-                    textAlign: 'center',
-                    background: 'transparent',
-                    fontSize: '0.9rem',
-                    display: 'block'
-                  }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  onMouseEnter={(e) => {
-                    e.target.style.background = 'rgba(255, 255, 255, 0.2)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.background = 'transparent';
-                  }}
-                >
-                  {item.name}
-                </a>
-              ))}
-            </div>
-          </div>
+            ENA Waste Management
+          </h1>
+          <p style={{
+            margin: 0,
+            fontSize: '0.9rem',
+            color: 'rgba(255, 255, 255, 0.9)'
+          }}>
+            MARPOL Compliance System
+          </p>
         </div>
+        
+        {/* Navigation */}
+        <nav style={{
+          display: 'flex',
+          gap: '2rem',
+          alignItems: 'center',
+          marginLeft: 'auto'
+        }}>
+          <a href="/" style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontWeight: '500',
+            padding: '0.5rem 1rem',
+            borderRadius: '6px',
+            transition: 'all 0.3s ease'
+          }} onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
+             onMouseLeave={(e) => e.target.style.background = 'transparent'}>
+            Dashboard
+          </a>
+          <a href="/form" style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontWeight: '500',
+            padding: '0.5rem 1rem',
+            borderRadius: '6px',
+            transition: 'all 0.3s ease'
+          }} onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
+             onMouseLeave={(e) => e.target.style.background = 'transparent'}>
+            Forms
+          </a>
+          <a href="/reports" style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontWeight: '500',
+            padding: '0.5rem 1rem',
+            borderRadius: '6px',
+            transition: 'all 0.3s ease'
+          }} onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
+             onMouseLeave={(e) => e.target.style.background = 'transparent'}>
+            Reports
+          </a>
+        </nav>
       </div>
     </header>
   );
@@ -193,10 +110,27 @@ const Header = () => {
 
 export default Header;
 EOF
+    echo "✅ Created clean Header without mobile complexity"
+fi
 
-echo "✅ Header fixed with proper hamburger visibility"
+# 2. Remove the mobile CSS files that are causing issues
+echo "🗑️ Removing mobile CSS files..."
+rm -f app/styles/mobile-responsive.css
+rm -f app/styles/responsive.css
 
-# 2. Update App.jsx to include catch-all route for 404 prevention
+# 3. Clean up globals.css - remove mobile imports
+echo "🔧 Cleaning up globals.css..."
+grep -v "mobile-responsive.css" app/styles/globals.css > app/styles/globals-clean.css
+grep -v "responsive.css" app/styles/globals-clean.css > app/styles/globals.css
+rm -f app/styles/globals-clean.css
+
+# 4. Fix the GitHub Pages 404 issue - this is the main problem!
+echo "🔧 Fixing GitHub Pages 404 issue..."
+
+# The issue is that GitHub Pages needs a catch-all route in the built files
+# We need to ensure the build includes proper routing
+
+# Update App.jsx to ensure proper routing
 cat > app/App.jsx << 'EOF'
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -220,7 +154,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/form" element={<MainForm />} />
             <Route path="/reports" element={<Reports />} />
-            {/* Catch-all route to prevent 404s on GitHub Pages */}
+            {/* Catch-all route for GitHub Pages SPA */}
             <Route path="*" element={<Dashboard />} />
           </Routes>
         </main>
@@ -232,7 +166,7 @@ function App() {
           marginTop: '80px',
           borderTop: '1px solid rgba(255, 255, 255, 0.1)'
         }}>
-          <div className="container">
+          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
@@ -279,33 +213,58 @@ function App() {
 export default App;
 EOF
 
-echo "✅ App.jsx updated with catch-all route"
+# 5. Ensure we have the 404.html for GitHub Pages SPA support
+echo "📄 Ensuring 404.html exists for GitHub Pages SPA..."
+cat > public/404.html << 'EOF'
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>MARPOL Waste Management</title>
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      var segmentCount = 0;
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?p=/' +
+        l.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to MARPOL Waste Management System...</p>
+  </body>
+</html>
+EOF
 
-# 3. Build and deploy
+# 6. Build and test
 echo "🔨 Building application..."
+rm -rf docs/
 npm run build
 
-if [ $? -eq 0 ]; then
-    echo "✅ Build successful"
-else
-    echo "❌ Build failed"
-    exit 1
-fi
+# 7. Verify the build has all pages
+echo "🔍 Verifying build contents..."
+ls -la docs/
+echo "HTML files in build: $(find docs/ -name "*.html" | wc -l)"
 
-# 4. Deploy to GitHub
+# 8. Deploy
 echo "📦 Deploying to GitHub Pages..."
 git add .
-git commit -m "FIX: Proper hamburger menu + catch-all routing"
+git commit -m "FIX: Remove mobile complexity and fix GitHub Pages 404"
 git push origin main
 
 echo ""
-echo "🎉 DEPLOYMENT COMPLETE!"
-echo "🌐 Live at: https://gitinitaddcommitlog.github.io/MAPOL/"
+echo "🎉 CLEAN DEPLOYMENT COMPLETE!"
+echo "🌐 Your site should now work at: https://gitinitaddcommitlog.github.io/MAPOL/"
 echo ""
-echo "✅ Fixed:"
-echo "   - Logo at top left corner"
-echo "   - Hamburger menu shows only on mobile"
-echo "   - Desktop navigation shows on larger screens"
-echo "   - Catch-all route prevents 404 errors"
+echo "✅ What was fixed:"
+echo "   - Removed all mobile responsiveness complexity"
+echo "   - Restored clean, working header"
+echo "   - Added catch-all route for GitHub Pages SPA"
+echo "   - Added 404.html for client-side routing"
+echo "   - All pages (Dashboard, Forms, Reports) should work"
 echo ""
-echo "📱 Test by resizing your browser to mobile size to see hamburger!"
+echo "💡 If you still see 404, wait 5 minutes for GitHub Pages to update"

@@ -20,7 +20,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/form" element={<MainForm />} />
             <Route path="/reports" element={<Reports />} />
-            {/* Catch-all route to prevent 404s on GitHub Pages */}
+            {/* Catch-all route for GitHub Pages SPA */}
             <Route path="*" element={<Dashboard />} />
           </Routes>
         </main>
@@ -32,7 +32,7 @@ function App() {
           marginTop: '80px',
           borderTop: '1px solid rgba(255, 255, 255, 0.1)'
         }}>
-          <div className="container">
+          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
