@@ -4,8 +4,8 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  root: './app',  // THIS IS THE KEY - point to your app directory
-  publicDir: '../public',
+  root: resolve(__dirname, 'app'),
+  publicDir: resolve(__dirname, 'public'),
   server: {
     port: 3000,
     open: true
@@ -15,7 +15,7 @@ export default defineConfig({
   },
   base: './',
   build: {
-    outDir: '../docs',
+    outDir: resolve(__dirname, 'docs'),
     assetsDir: 'assets',
     emptyOutDir: true
   }

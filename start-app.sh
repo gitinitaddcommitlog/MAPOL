@@ -1,33 +1,36 @@
 #!/bin/bash
+# verify-build-before-deploy.sh
 
-echo "🚀 Starting MARPOL Application..."
-echo "================================="
+echo "🔍 VERIFYING BUILD BEFORE DEPLOYMENT"
 
-# Check if backend node_modules exists
-if [ ! -d "backend/node_modules" ]; then
-    echo "📦 Installing backend dependencies..."
-    cd backend
-    npm install
-    cd ..
+# Build the app
+echo "🔨 Building..."
+npm run build
+
+echo "📊 Build output analysis:"
+echo "Main HTML file: docs/index.html ($(wc -c < docs/index.html) bytes)"
+echo "JS files: $(find docs/ -name "*.js" | wc -l)"
+echo "Total files in docs/: $(find docs/ -type f | wc -l)"
+
+# Check if the built index.html contains React content
+echo ""
+echo "🔎 Checking built index.html for React app:"
+if grep -q "root\|react" docs/index.html; then
+    echo "✅ index.html contains React app structure"
+else
+    echo "❌ index.html missing React content"
+    echo "First 10 lines of built index.html:"
+    head -10 docs/index.html
 fi
 
-# Check if frontend node_modules exists  
-if [ ! -d "node_modules" ]; then
-    echo "📦 Installing frontend dependencies..."
-    npm install
-fi
+# Check for asset files
+echo ""
+echo "📦 Checking assets:"
+find docs/ -type f -name "*.glb" -o -name "*.png" -o -name "*.jpg" | head -5
 
 echo ""
-echo "✅ Dependencies installed!"
+echo "🌐 Test the built version locally:"
+echo "   npm run preview"
+echo "   (This serves the EXACT same files that GitHub Pages will serve)"
 echo ""
-echo "📋 To run the application:"
-echo ""
-echo "Terminal 1 - Backend:"
-echo "   cd backend && npm run dev"
-echo ""
-echo "Terminal 2 - Frontend:"
-echo "   npm run dev"
-echo ""
-echo "🌐 Application will be available at:"
-echo "   Frontend: http://localhost:3000"
-echo "   Backend:  http://localhost:5000"
+echo "📋 If 'npm run preview' shows your complete app, then GitHub Pages will work!"

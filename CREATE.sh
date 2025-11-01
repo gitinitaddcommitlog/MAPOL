@@ -1,44 +1,62 @@
 #!/bin/bash
-# final-deployment.sh
+# complete-deployment-fix.sh
 
-echo "🚀 FINAL DEPLOYMENT TO GITHUB PAGES"
+echo "🚀 COMPLETE DEPLOYMENT FIX"
 
-# Build the production version
-echo "🔨 Building production version..."
+# 1. Copy the 3D logo
+echo "📁 Copying 3D logo..."
+cp "/home/donkali/Documents/FIBERSPINES/LAB/3DVIEWER/BLENDER-FILES/ENA.glb" "public/ena-logo.glb"
+
+# 2. Make sure vite.config.js is correct
+cat > vite.config.js << 'EOF'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
+
+export default defineConfig({
+  plugins: [react()],
+  root: resolve(__dirname, 'app'),
+  publicDir: resolve(__dirname, 'public'),
+  server: {
+    port: 3000,
+    open: true
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
+  },
+  base: './',
+  build: {
+    outDir: resolve(__dirname, 'docs'),
+    assetsDir: 'assets',
+    emptyOutDir: true
+  }
+})
+EOF
+
+# 3. Clean and rebuild
+echo "🔨 Rebuilding application..."
+rm -rf docs/
 npm run build
 
-echo "📊 Build completed! Checking output..."
-echo "JS files: $(find docs/ -name '*.js' | wc -l)"
-echo "CSS files: $(find docs/ -name '*.css' | wc -l)"
-echo "Total files in docs/: $(find docs/ -type f | wc -l)"
+# 4. Verify the build has the logo
+echo "🔍 Verifying build..."
+if [ -f "docs/assets/ena-logo.glb" ] || [ -f "docs/ena-logo.glb" ]; then
+    echo "✅ 3D logo is in build"
+else
+    echo "❌ 3D logo missing from build - checking where it went..."
+    find docs/ -name "*.glb"
+fi
 
-# Test the built version locally first
-echo "🌐 Testing built version locally..."
-echo "Opening preview server in background..."
-npm run preview &
-PREVIEW_PID=$!
-
-# Wait a moment for preview to start
-sleep 3
-
-echo ""
-echo "✅ If no errors above, the build is successful!"
-echo "📦 Deploying to GitHub Pages..."
+# 5. Force push all changes to GitHub
+echo "📦 Pushing to GitHub..."
 git add .
-git commit -m "Deploy complete MARPOL app with full interface"
+git status
+git commit -m "FIX: Complete deployment with 3D logo asset"
 git push origin main
 
-# Kill the preview server
-kill $PREVIEW_PID 2>/dev/null
-
 echo ""
-echo "🎉 DEPLOYMENT COMPLETE!"
-echo "🌐 Your app will be live at: https://gitinitaddcommitlog.github.io/MAPOL/"
+echo "✅ DEPLOYMENT PUSHED!"
+echo "🌐 Check in 2-5 minutes: https://gitinitaddcommitlog.github.io/MAPOL/"
 echo ""
-echo "⏰ Wait 2-5 minutes, then check:"
-echo "   1. https://gitinitaddcommitlog.github.io/MAPOL/"
-echo "   2. All pages work (Dashboard, Forms, Reports)"
-echo "   3. 3D logo displays correctly"
-echo "   4. All form fields are visible"
-echo ""
-echo "💡 If anything is missing, we'll fix the specific issues."
+echo "💡 If the page still closes, check browser console for new errors"
+echo "   The 404 for ena-logo.glb should now be fixed"
