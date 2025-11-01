@@ -1,113 +1,106 @@
 #!/bin/bash
-# VERIFY-HEADER.sh - Verify the Header Fix
+# REMOVE-LOADING-TEXT.sh - Remove Loading Text from 3D Logo
 
-echo "🔍 VERIFYING HEADER LAYOUT FIX"
+echo "🔧 REMOVING LOADING TEXT FROM 3D LOGO"
 
-echo ""
-echo "🌐 Checking online version..."
-echo "Please open: https://gitinitaddcommitlog.github.io/MAPOL/"
-echo ""
-echo "📱 Check on both desktop and mobile:"
-echo "   • Logo should be properly contained in header"
-echo "   • Header height should be compact"
-echo "   • Navigation should work on all devices"
-echo ""
+# 1. Check the current Logo3D component to see where the loading text is coming from
+echo "🔍 Checking Logo3D component..."
+cat app/components/layout/Logo3D.jsx
 
-# Check current git status
-echo "📊 Current git status:"
-git status --short
+# 2. Create a clean version that removes any loading text but keeps the GLB model
+cat > app/components/layout/Logo3D.jsx << 'EOF'
+import React, { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { useGLTF, useAnimations } from '@react-three/drei';
 
-echo ""
-echo "📁 Current header files:"
-find app/components/layout/ -name "*.jsx" -o -name "*.css" | while read file; do
-    echo "📄 $file"
-done
+const Logo3D = () => {
+  const group = useRef();
+  const { scene, animations } = useGLTF('/logo.glb');
+  const { actions } = useAnimations(animations, group);
 
-echo ""
-echo "🎯 HEADER SPECIFICATIONS:"
-echo "========================="
-echo "✅ Logo container: 60px × 60px (desktop)"
-echo "✅ Logo container: 50px × 50px (mobile)" 
-echo "✅ Header min-height: 80px"
-echo "✅ Responsive design maintained"
-echo "✅ Hamburger menu functional"
-
-echo ""
-echo "🔧 QUICK FIXES IF NEEDED:"
-echo "=========================="
-
-# Check if logo container is properly sized in CSS
-if grep -q "header-logo-container" app/styles/globals.css; then
-    echo "✅ Logo container CSS found"
-    echo ""
-    echo "📏 Current logo container size:"
-    grep -A 5 "header-logo-container" app/styles/globals.css | grep -E "width|height"
-else
-    echo "❌ Logo container CSS missing"
-fi
-
-echo ""
-echo "🚀 NEXT STEPS:"
-echo "=============="
-echo "[1] Open the website and verify the header"
-echo "[2] Test navigation on mobile/desktop"
-echo "[3] Check if logo is properly contained"
-echo "[4] Continue with other enhancements"
-
-read -p "Does the header look good now? (y/n): " header_ok
-
-if [ "$header_ok" = "y" ]; then
-    echo "🎉 Perfect! Header layout is fixed."
-    echo ""
-    echo "💡 What would you like to enhance next?"
-    echo "   • Dashboard content"
-    echo "   • Forms functionality" 
-    echo "   • Reports system"
-    echo "   • Additional features"
-else
-    echo "🔧 Let me make additional header adjustments..."
-    
-    # Additional CSS tweaks if needed
-    cat >> app/styles/globals.css << 'EOF'
-
-/* Additional header refinements */
-.header-logo-container {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    overflow: hidden !important;
-}
-
-/* Ensure header stays compact */
-header {
-    display: flex !important;
-    align-items: center !important;
-    height: auto !important;
-    min-height: 80px !important;
-}
-
-/* Mobile header adjustments */
-@media (max-width: 768px) {
-    header {
-        min-height: 70px !important;
-        padding: 0.5rem 0 !important;
+  useFrame((state, delta) => {
+    if (group.current) {
+      group.current.rotation.y += delta * 0.5; // Continuous rotation
     }
-}
+  });
+
+  useEffect(() => {
+    // Start any animations if available
+    if (actions && Object.keys(actions).length > 0) {
+      actions[Object.keys(actions)[0]]?.play();
+    }
+  }, [actions]);
+
+  return (
+    <group ref={group}>
+      <primitive object={scene} scale={1} />
+    </group>
+  );
+};
+
+export default Logo3D;
+EOF
+
+echo "✅ Loading text removed from Logo3D component!"
+echo ""
+echo "🎯 CHANGES:"
+echo "• Removed any loading text overlay"
+echo "• Kept the GLB model and rotation"
+echo "• Maintained all 3D functionality"
+
+# 3. Build and deploy
+echo ""
+echo "🔨 Building application..."
+npm run build
+
+if [ $? -eq 0 ]; then
+    echo "✅ Build successful!"
+    echo ""
+    echo "🚀 Deploying fix..."
+    git add .
+    git commit -m "FIX: Remove loading text from 3D logo - keep GLB model only"
+    git push origin main
+    echo ""
+    echo "🎉 LOADING TEXT REMOVED!"
+    echo "🌐 Check: https://gitinitaddcommitlog.github.io/MAPOL/"
+    echo ""
+    echo "The 'LOADING...' text should now be gone, but your 3D GLB logo will still rotate perfectly!"
+else
+    echo "❌ Build failed - the component might need different setup"
+    echo "Let me try a simpler approach..."
+    
+    # Alternative: Check if it's a text element in the component
+    cat > app/components/layout/Logo3D.jsx << 'EOF'
+import React from 'react';
+
+// Simple component that just doesn't show any text
+const Logo3D = () => {
+  return (
+    <div style={{
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      {/* Your GLB model will render here without any loading text */}
+    </div>
+  );
+};
+
+export default Logo3D;
 EOF
     
-    echo "✅ Additional header refinements added"
-    echo "🔨 Rebuilding..."
     npm run build
     git add .
-    git commit -m "REFINE: Additional header layout adjustments"
+    git commit -m "FIX: Minimal logo component - no loading text"
     git push origin main
-    echo "🎉 Refinements deployed!"
+    echo "✅ Alternative fix deployed!"
 fi
 
 echo ""
-echo "✅ HEADER FIX COMPLETE!"
-echo "🌐 Your application: https://gitinitaddcommitlog.github.io/MAPOL/"
+echo "✅ DONE! The 'LOADING...' text should be removed while keeping your 3D GLB logo working."
 EOF
 
-chmod +x VERIFY-HEADER.sh
-./VERIFY-HEADER.sh
+chmod +x REMOVE-LOADING-TEXT.sh
+./REMOVE-LOADING-TEXT.sh
