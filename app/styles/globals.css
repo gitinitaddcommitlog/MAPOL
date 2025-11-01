@@ -417,3 +417,6 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-tertiary);
 }
+
+/* Import responsive styles */
+@import './responsive.css';

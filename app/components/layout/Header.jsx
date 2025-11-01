@@ -1,115 +1,163 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
 import Logo3D from './Logo3D.jsx';
 
 const Header = () => {
-  const location = useLocation();
-
-  const navItems = [
-    { path: '/', label: 'Dashboard', icon: '📊' },
-    { path: '/form', label: 'Waste Form', icon: '📝' },
-    { path: '/reports', label: 'Reports', icon: '📈' },
-  ];
-
-  const isActive = (path) => location.pathname === path;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <header style={{
       background: 'var(--gradient-primary)',
-      borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-      padding: '16px 0',
-      boxShadow: 'var(--shadow-xl)',
+      padding: '1rem 0',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
       position: 'sticky',
       top: 0,
-      zIndex: 1000,
-      backdropFilter: 'blur(10px)',
+      zIndex: 1000
     }}>
       <div className="container">
         <div style={{
           display: 'flex',
-          justifyContent: 'space-between',
           alignItems: 'center',
+          justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '24px'
+          gap: '1rem'
         }}>
-          {/* Logo and Company Name */}
+          {/* Logo and Brand */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '16px',
-            flexShrink: 0
+            gap: '1rem',
+            flex: '1 1 auto'
           }}>
-            <Logo3D />
+            <div style={{
+              width: '60px',
+              height: '60px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <Logo3D />
+            </div>
             <div>
-              <h1 style={{ 
-                color: 'white',
-                fontSize: '28px',
+              <h1 style={{
                 margin: 0,
-                fontWeight: 700,
-                letterSpacing: '-0.02em'
+                fontSize: 'clamp(1.25rem, 4vw, 1.75rem)',
+                fontWeight: '700',
+                color: 'white',
+                lineHeight: '1.2'
               }}>
-                ENA WASTE MANAGEMENT
+                ENA Waste Management
               </h1>
               <p style={{
+                margin: 0,
+                fontSize: 'clamp(0.75rem, 2vw, 0.9rem)',
                 color: 'rgba(255, 255, 255, 0.8)',
-                fontSize: '14px',
-                margin: '4px 0 0 0',
-                fontWeight: 400
+                opacity: 0.9
               }}>
                 MARPOL Compliance System
               </p>
             </div>
           </div>
-          
-          {/* Navigation */}
-          <nav>
-            <ul style={{
-              display: 'flex',
-              listStyle: 'none',
-              gap: '8px',
-              margin: 0,
-              padding: 0,
-              flexWrap: 'wrap'
-            }}>
-              {navItems.map(item => (
-                <li key={item.path}>
-                  <Link 
-                    to={item.path}
-                    style={{
-                      color: isActive(item.path) ? 'white' : 'rgba(255, 255, 255, 0.8)',
-                      textDecoration: 'none',
-                      fontWeight: isActive(item.path) ? '600' : '400',
-                      padding: '12px 20px',
-                      borderRadius: '12px',
-                      background: isActive(item.path) ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                      border: isActive(item.path) ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      transition: 'all 0.3s ease',
-                      backdropFilter: 'blur(10px)'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive(item.path)) {
-                        e.target.style.background = 'rgba(255, 255, 255, 0.1)';
-                        e.target.style.color = 'white';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive(item.path)) {
-                        e.target.style.background = 'transparent';
-                        e.target.style.color = 'rgba(255, 255, 255, 0.8)';
-                      }
-                    }}
-                  >
-                    <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+
+          {/* Desktop Navigation */}
+          <nav className="desktop-only" style={{
+            display: 'flex',
+            gap: '2rem',
+            alignItems: 'center'
+          }}>
+            {['Dashboard', 'Forms', 'Reports'].map((item) => (
+              <a
+                key={item}
+                href={item === 'Dashboard' ? '/' : `/${item.toLowerCase()}`}
+                style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontWeight: '500',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '8px',
+                  transition: 'all 0.3s ease',
+                  fontSize: 'clamp(0.9rem, 2vw, 1rem)'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.target.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'transparent';
+                  e.target.style.transform = 'translateY(0)';
+                }}
+              >
+                {item}
+              </a>
+            ))}
           </nav>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="mobile-only touch-button"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            style={{
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: 'none',
+              borderRadius: '8px',
+              color: 'white',
+              padding: '0.75rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            aria-label="Toggle menu"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M3 12H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M3 6H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {isMenuOpen && (
+          <nav className="mobile-only" style={{
+            marginTop: '1rem',
+            padding: '1rem',
+            background: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: '12px',
+            backdropFilter: 'blur(10px)'
+          }}>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem'
+            }}>
+              {['Dashboard', 'Forms', 'Reports'].map((item) => (
+                <a
+                  key={item}
+                  href={item === 'Dashboard' ? '/' : `/${item.toLowerCase()}`}
+                  style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontWeight: '500',
+                    padding: '1rem',
+                    borderRadius: '8px',
+                    transition: 'all 0.3s ease',
+                    textAlign: 'center',
+                    fontSize: '1.1rem'
+                  }}
+                  onClick={() => setIsMenuOpen(false)}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'transparent';
+                  }}
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+          </nav>
+        )}
       </div>
     </header>
   );

@@ -1,242 +1,214 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { wasteApi } from '../../services/api/wasteApi';
+import React from 'react';
 
 const Dashboard = () => {
-  const [stats, setStats] = useState({
-    totalSubmissions: 0,
-    totalShips: 0,
-    recentSubmissions: 0
-  });
-  const [loading, setLoading] = useState(true);
+  const stats = [
+    { label: 'Total Reports', value: '24', change: '+12%' },
+    { label: 'Pending Forms', value: '8', change: '-3%' },
+    { label: 'Completed', value: '16', change: '+5%' },
+    { label: 'Compliance Rate', value: '92%', change: '+2%' }
+  ];
 
-  useEffect(() => {
-    loadStatistics();
-  }, []);
-
-  const loadStatistics = async () => {
-    try {
-      // In a real app, you would call wasteApi.getStatistics()
-      // For now, we'll use mock data
-      setTimeout(() => {
-        setStats({
-          totalSubmissions: 47,
-          totalShips: 23,
-          recentSubmissions: 12
-        });
-        setLoading(false);
-      }, 1000);
-    } catch (error) {
-      console.error('Failed to load statistics:', error);
-      setLoading(false);
-    }
-  };
-
-  const StatCard = ({ title, value, subtitle, icon, color }) => (
-    <div className="card" style={{
-      background: `linear-gradient(135deg, ${color}20, ${color}10)`,
-      border: `1px solid ${color}30`
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div>
-          <h3 style={{ color: 'var(--text-secondary)', fontSize: '14px', fontWeight: 600, marginBottom: '8px' }}>
-            {title}
-          </h3>
-          <div style={{ fontSize: '32px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '4px' }}>
-            {loading ? '...' : value}
-          </div>
-          <p style={{ color: 'var(--text-tertiary)', fontSize: '14px' }}>
-            {subtitle}
-          </p>
-        </div>
-        <div style={{
-          width: '48px',
-          height: '48px',
-          borderRadius: '12px',
-          background: `linear-gradient(135deg, ${color}, ${color}dd)`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '20px'
-        }}>
-          {icon}
-        </div>
-      </div>
-    </div>
-  );
-
-  const QuickAction = ({ title, description, icon, link, color }) => (
-    <Link to={link} className="card" style={{
-      textDecoration: 'none',
-      color: 'inherit',
-      display: 'block',
-      transition: 'all 0.3s ease',
-      border: `2px solid ${color}20`,
-      background: `linear-gradient(135deg, ${color}08, ${color}05)`
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{
-          width: '56px',
-          height: '56px',
-          borderRadius: '14px',
-          background: `linear-gradient(135deg, ${color}, ${color}dd)`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '24px',
-          flexShrink: 0
-        }}>
-          {icon}
-        </div>
-        <div>
-          <h3 style={{ color: 'var(--text-primary)', marginBottom: '4px', fontWeight: 600 }}>
-            {title}
-          </h3>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '14px', margin: 0 }}>
-            {description}
-          </p>
-        </div>
-      </div>
-    </Link>
-  );
+  const quickActions = [
+    { label: 'New Waste Form', icon: '📝', link: '/form' },
+    { label: 'View Reports', icon: '📊', link: '/reports' },
+    { label: 'Compliance Check', icon: '✅', link: '#' },
+    { label: 'Export Data', icon: '📤', link: '#' }
+  ];
 
   return (
-    <div className="container">
-      {/* Hero Section */}
-      <div style={{ marginBottom: '48px' }}>
-        <div className="card-elevated" style={{
-          background: 'var(--gradient-primary)',
-          color: 'white',
-          textAlign: 'center',
-          padding: '60px 40px'
+    <div style={{ 
+      minHeight: 'calc(100vh - 200px)',
+      padding: 'var(--mobile-padding)'
+    }}>
+      <div className="container">
+        {/* Welcome Section */}
+        <section style={{ 
+          marginBottom: '3rem',
+          textAlign: 'center'
         }}>
-          <h1 style={{ 
-            fontSize: '3rem', 
-            fontWeight: 700, 
-            marginBottom: '16px',
-            background: 'linear-gradient(135deg, #fff, #a0c8ff)',
+          <h1 className="responsive-heading" style={{
+            background: 'var(--gradient-primary)',
             WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            marginBottom: '1rem',
+            fontWeight: '700'
           }}>
-            ENA Waste Management
+            MARPOL Compliance Dashboard
           </h1>
-          <p style={{ 
-            fontSize: '1.25rem', 
-            opacity: 0.9, 
-            marginBottom: '32px',
+          <p className="responsive-text" style={{
+            color: '#64748b',
             maxWidth: '600px',
-            margin: '0 auto 32px'
+            margin: '0 auto',
+            lineHeight: '1.6'
           }}>
-            Advanced MARPOL Compliance System for Sustainable Maritime Operations
+            Monitor waste management compliance, track reports, and ensure environmental protection standards.
           </p>
-          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link to="/form" className="btn" style={{
-              background: 'rgba(255, 255, 255, 0.2)',
-              color: 'white',
-              border: '2px solid rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(10px)'
-            }}>
-              🚀 Start New Waste Form
-            </Link>
-            <Link to="/reports" className="btn" style={{
-              background: 'transparent',
-              color: 'white',
-              border: '2px solid rgba(255, 255, 255, 0.3)'
-            }}>
-              📈 View Analytics
-            </Link>
+        </section>
+
+        {/* Stats Grid */}
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{
+            fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
+            marginBottom: '1.5rem',
+            color: '#1e293b'
+          }}>
+            Overview
+          </h2>
+          <div className="responsive-grid">
+            {stats.map((stat, index) => (
+              <div
+                key={index}
+                style={{
+                  background: 'white',
+                  padding: '1.5rem',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  border: '1px solid #e2e8f0',
+                  textAlign: 'center'
+                }}
+              >
+                <div style={{
+                  fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+                  fontWeight: '700',
+                  color: '#1e293b',
+                  marginBottom: '0.5rem'
+                }}>
+                  {stat.value}
+                </div>
+                <div style={{
+                  color: '#64748b',
+                  fontSize: '0.9rem',
+                  marginBottom: '0.5rem'
+                }}>
+                  {stat.label}
+                </div>
+                <div style={{
+                  color: stat.change.startsWith('+') ? '#10b981' : '#ef4444',
+                  fontSize: '0.8rem',
+                  fontWeight: '600'
+                }}>
+                  {stat.change}
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      </div>
+        </section>
 
-      {/* Statistics Grid */}
-      <div style={{ marginBottom: '48px' }}>
-        <h2 style={{ 
-          color: 'var(--text-primary)', 
-          marginBottom: '24px',
-          fontSize: '1.75rem',
-          fontWeight: 700
-        }}>
-          System Overview
-        </h2>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-          gap: '24px',
-          marginBottom: '40px'
-        }}>
-          <StatCard
-            title="Total Submissions"
-            value={stats.totalSubmissions}
-            subtitle="MARPOL forms processed"
-            icon="📊"
-            color="#00a8cc"
-          />
-          <StatCard
-            title="Registered Ships"
-            value={stats.totalShips}
-            subtitle="Active vessels"
-            icon="🚢"
-            color="#10b981"
-          />
-          <StatCard
-            title="Recent Activity"
-            value={stats.recentSubmissions}
-            subtitle="Last 7 days"
-            icon="🔄"
-            color="#f59e0b"
-          />
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div>
-        <h2 style={{ 
-          color: 'var(--text-primary)', 
-          marginBottom: '24px',
-          fontSize: '1.75rem',
-          fontWeight: 700
-        }}>
-          Quick Actions
-        </h2>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-          gap: '24px' 
-        }}>
-          <QuickAction
-            title="New Waste Form"
-            description="Submit a new MARPOL waste collection form"
-            icon="📝"
-            link="/form"
-            color="#00a8cc"
-          />
-          <QuickAction
-            title="View Reports"
-            description="Access analytics and compliance reports"
-            icon="📈"
-            link="/reports"
-            color="#10b981"
-          />
-          <QuickAction
-            title="Ship Registry"
-            description="Manage registered vessels"
-            icon="🚢"
-            link="/ships"
-            color="#f59e0b"
-          />
-        </div>
-      </div>
-
-      {/* Recent Activity Section */}
-      <div style={{ marginTop: '48px' }}>
-        <div className="card">
-          <h3 style={{ color: 'var(--text-primary)', marginBottom: '20px' }}>Recent Activity</h3>
-          <div style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '40px' }}>
-            <div style={{ fontSize: '48px', marginBottom: '16px' }}>📊</div>
-            <p>Activity feed and recent submissions will appear here</p>
+        {/* Quick Actions */}
+        <section>
+          <h2 style={{
+            fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
+            marginBottom: '1.5rem',
+            color: '#1e293b'
+          }}>
+            Quick Actions
+          </h2>
+          <div className="responsive-grid">
+            {quickActions.map((action, index) => (
+              <a
+                key={index}
+                href={action.link}
+                className="touch-button"
+                style={{
+                  background: 'white',
+                  padding: '1.5rem',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  border: '1px solid #e2e8f0',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-4px)';
+                  e.target.style.boxShadow = '0 8px 15px -3px rgba(0, 0, 0, 0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+                }}
+              >
+                <span style={{ fontSize: '2rem' }}>{action.icon}</span>
+                <span style={{
+                  fontWeight: '600',
+                  color: '#1e293b',
+                  textAlign: 'center',
+                  fontSize: 'clamp(0.9rem, 2vw, 1rem)'
+                }}>
+                  {action.label}
+                </span>
+              </a>
+            ))}
           </div>
-        </div>
+        </section>
+
+        {/* Recent Activity - Mobile Optimized */}
+        <section style={{ marginTop: '3rem' }}>
+          <h2 style={{
+            fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
+            marginBottom: '1.5rem',
+            color: '#1e293b'
+          }}>
+            Recent Activity
+          </h2>
+          <div style={{
+            background: 'white',
+            borderRadius: '12px',
+            padding: '1.5rem',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            overflowX: 'auto'
+          }}>
+            <div style={{
+              display: 'grid',
+              gap: '1rem',
+              minWidth: '300px'
+            }}>
+              {[
+                { action: 'Waste Form Submitted', time: '2 hours ago', status: 'Completed' },
+                { action: 'Compliance Check', time: '5 hours ago', status: 'Pending' },
+                { action: 'Report Generated', time: '1 day ago', status: 'Completed' }
+              ].map((activity, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '1rem',
+                    background: '#f8fafc',
+                    borderRadius: '8px',
+                    flexWrap: 'wrap',
+                    gap: '0.5rem'
+                  }}
+                >
+                  <div style={{ flex: '1 1 200px' }}>
+                    <div style={{ fontWeight: '600', color: '#1e293b' }}>
+                      {activity.action}
+                    </div>
+                    <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+                      {activity.time}
+                    </div>
+                  </div>
+                  <div style={{
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: '20px',
+                    fontSize: '0.75rem',
+                    fontWeight: '600',
+                    background: activity.status === 'Completed' ? '#dcfce7' : '#fef3c7',
+                    color: activity.status === 'Completed' ? '#166534' : '#92400e'
+                  }}>
+                    {activity.status}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
