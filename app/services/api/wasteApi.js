@@ -1,66 +1,64 @@
-import { mockApi } from './mockApi.js';
+const API_BASE = 'http://localhost:5000/api';
 
-const API_BASE_URL = 'http://localhost:5000/api';
-const IS_PRODUCTION = import.meta.env.PROD;
+// Generic API request function
+async function apiRequest(endpoint, options = {}) {
+  const url = `${API_BASE}${endpoint}`;
+  
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+    ...options,
+  };
+
+  if (config.body && typeof config.body === 'object') {
+    config.body = JSON.stringify(config.body);
+  }
+
+  try {
+    const response = await fetch(url, config);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || `HTTP error! status: ${response.status}`);
+    }
+
+    return data;
+  } catch (error) {
+    console.error('API request failed:', error);
+    throw error;
+  }
+}
 
 export const wasteApi = {
+  // Submit MARPOL form
   async submitForm(formData) {
-    // Use mock API in production (GitHub Pages)
-    if (IS_PRODUCTION) {
-      return await mockApi.submitForm(formData);
-    }
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/forms`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('API Error, using mock data:', error);
-      return await mockApi.submitForm(formData);
-    }
+    return apiRequest('/forms/submit', {
+      method: 'POST',
+      body: formData,
+    });
   },
 
-  async getReports() {
-    // Use mock API in production (GitHub Pages)
-    if (IS_PRODUCTION) {
-      return await mockApi.getReports();
-    }
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/reports`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('API Error, using mock data:', error);
-      return await mockApi.getReports();
-    }
+  // Get all form submissions
+  async getSubmissions() {
+    return apiRequest('/forms/submissions');
   },
 
-  async checkHealth() {
-    if (IS_PRODUCTION) {
-      return await mockApi.checkHealth();
-    }
+  // Get submission by ID
+  async getSubmission(id) {
+    return apiRequest(`/forms/submissions/${id}`);
+  },
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/health`);
-      return await response.json();
-    } catch (error) {
-      console.error('Health check failed, using mock:', error);
-      return await mockApi.checkHealth();
-    }
-  }
+  // Get dashboard statistics
+  async getStatistics() {
+    return apiRequest('/forms/statistics');
+  },
+
+  // Health check
+  async healthCheck() {
+    return apiRequest('/health');
+  },
 };
+
+export default wasteApi;
