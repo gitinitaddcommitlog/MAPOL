@@ -419,3 +419,6 @@ body {
 }
 
 /* Import responsive styles */
+
+/* Responsive Styles */
+@import './responsive.css';

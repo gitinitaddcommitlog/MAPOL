@@ -1,114 +1,161 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
 import Logo3D from './Logo3D.jsx';
 
 const Header = () => {
-  const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const navItems = [
-    { path: '/', label: 'Dashboard', icon: '📊' },
-    { path: '/form', label: 'Waste Form', icon: '📝' },
-    { path: '/reports', label: 'Reports', icon: '📈' },
+  const navigationItems = [
+    { name: 'Dashboard', path: '/' },
+    { name: 'Forms', path: '/form' },
+    { name: 'Reports', path: '/reports' }
   ];
-
-  const isActive = (path) => location.pathname === path;
 
   return (
     <header style={{
       background: 'var(--gradient-primary)',
-      borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-      padding: '16px 0',
-      boxShadow: 'var(--shadow-xl)',
+      padding: '1rem 0',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
       position: 'sticky',
       top: 0,
-      zIndex: 1000,
-      backdropFilter: 'blur(10px)',
+      zIndex: 1000
     }}>
-      <div className="container">
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 2rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1.5rem'
+      }}>
+        {/* Logo */}
         <div style={{
+          width: '60px',
+          height: '60px',
           display: 'flex',
-          justifyContent: 'space-between',
           alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '24px'
+          justifyContent: 'center',
+          flexShrink: 0
         }}>
-          {/* Logo and Company Name */}
+          <Logo3D />
+        </div>
+        
+        {/* Brand */}
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <h1 style={{
+            margin: 0,
+            fontSize: '1.75rem',
+            fontWeight: '700',
+            color: 'white',
+            lineHeight: '1.2'
+          }}>
+            ENA Waste Management
+          </h1>
+          <p style={{
+            margin: 0,
+            fontSize: '0.9rem',
+            color: 'rgba(255, 255, 255, 0.9)'
+          }}>
+            MARPOL Compliance System
+          </p>
+        </div>
+        
+        {/* Desktop Navigation */}
+        <nav className="desktop-nav" style={{
+          display: 'flex',
+          gap: '2rem',
+          alignItems: 'center',
+          marginLeft: 'auto'
+        }}>
+          {navigationItems.map((item) => (
+            <a
+              key={item.name}
+              href={item.path}
+              style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontWeight: '500',
+                padding: '0.5rem 1rem',
+                borderRadius: '6px',
+                transition: 'all 0.3s ease',
+                whiteSpace: 'nowrap'
+              }}
+              onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
+              onMouseLeave={(e) => e.target.style.background = 'transparent'}
+            >
+              {item.name}
+            </a>
+          ))}
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="mobile-nav-button"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          style={{
+            background: 'rgba(255, 255, 255, 0.1)',
+            border: 'none',
+            borderRadius: '6px',
+            color: 'white',
+            padding: '0.5rem',
+            cursor: 'pointer',
+            display: 'none',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '40px',
+            height: '40px',
+            flexShrink: 0
+          }}
+          aria-label="Toggle menu"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M3 12H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <path d="M3 6H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <path d="M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`} style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 2rem'
+      }}>
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.1)',
+          borderRadius: '8px',
+          padding: '1rem',
+          backdropFilter: 'blur(10px)',
+          marginTop: '0.5rem'
+        }}>
           <div style={{
             display: 'flex',
-            alignItems: 'center',
-            gap: '16px',
-            flexShrink: 0
+            flexDirection: 'column',
+            gap: '0.5rem'
           }}>
-            <Logo3D />
-            <div>
-              <h1 style={{ 
-                color: 'white',
-                fontSize: '28px',
-                margin: 0,
-                fontWeight: 700,
-                letterSpacing: '-0.02em'
-              }}>
-                ENA WASTE MANAGEMENT
-              </h1>
-              <p style={{
-                color: 'rgba(255, 255, 255, 0.8)',
-                fontSize: '14px',
-                margin: '4px 0 0 0',
-                fontWeight: 400
-              }}>
-                MARPOL Compliance System
-              </p>
-            </div>
+            {navigationItems.map((item) => (
+              <a
+                key={item.name}
+                href={item.path}
+                className="touch-target"
+                style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontWeight: '500',
+                  padding: '1rem',
+                  borderRadius: '6px',
+                  transition: 'all 0.3s ease',
+                  textAlign: 'center',
+                  background: 'transparent'
+                }}
+                onClick={() => setIsMobileMenuOpen(false)}
+                onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.2)'}
+                onMouseLeave={(e) => e.target.style.background = 'transparent'}
+              >
+                {item.name}
+              </a>
+            ))}
           </div>
-          
-          {/* Navigation */}
-          <nav>
-            <ul style={{
-              display: 'flex',
-              listStyle: 'none',
-              gap: '8px',
-              margin: 0,
-              padding: 0,
-              flexWrap: 'wrap'
-            }}>
-              {navItems.map(item => (
-                <li key={item.path}>
-                  <Link 
-                    to={item.path}
-                    style={{
-                      color: isActive(item.path) ? 'white' : 'rgba(255, 255, 255, 0.8)',
-                      textDecoration: 'none',
-                      fontWeight: isActive(item.path) ? '600' : '400',
-                      padding: '12px 20px',
-                      borderRadius: '12px',
-                      background: isActive(item.path) ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                      border: isActive(item.path) ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      transition: 'all 0.3s ease',
-                      backdropFilter: 'blur(10px)'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive(item.path)) {
-                        e.target.style.background = 'rgba(255, 255, 255, 0.1)';
-                        e.target.style.color = 'white';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive(item.path)) {
-                        e.target.style.background = 'transparent';
-                        e.target.style.color = 'rgba(255, 255, 255, 0.8)';
-                      }
-                    }}
-                  >
-                    <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
         </div>
       </div>
     </header>

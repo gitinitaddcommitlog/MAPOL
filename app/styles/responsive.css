@@ -1,0 +1,174 @@
+/* 📱 CAREFUL RESPONSIVE DESIGN - iPhone 12 Pro Max & Tablets */
+
+/* iPhone 12 Pro Max: 428px x 926px */
+@media (max-width: 428px) {
+  /* Header adjustments for mobile */
+  header > div {
+    padding: 0 1rem !important;
+  }
+  
+  header h1 {
+    font-size: 1.25rem !important;
+  }
+  
+  header p {
+    font-size: 0.75rem !important;
+  }
+  
+  .desktop-nav {
+    display: none !important;
+  }
+  
+  .mobile-nav-button {
+    display: flex !important;
+  }
+  
+  /* Main content padding */
+  main {
+    padding: 0 1rem !important;
+  }
+  
+  /* Footer adjustments */
+  footer > div {
+    padding: 0 1rem !important;
+  }
+  
+  footer .grid-layout {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+}
+
+/* Tablets and larger phones: 429px - 768px */
+@media (min-width: 429px) and (max-width: 768px) {
+  header > div {
+    padding: 0 1.5rem !important;
+  }
+  
+  header h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  header p {
+    font-size: 0.8rem !important;
+  }
+  
+  .desktop-nav {
+    display: none !important;
+  }
+  
+  .mobile-nav-button {
+    display: flex !important;
+  }
+  
+  main {
+    padding: 0 1.5rem !important;
+  }
+  
+  footer > div {
+    padding: 0 1.5rem !important;
+  }
+  
+  footer .grid-layout {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 2rem !important;
+  }
+}
+
+/* Desktop: 769px and above */
+@media (min-width: 769px) {
+  .mobile-nav-button {
+    display: none !important;
+  }
+  
+  .mobile-menu {
+    display: none !important;
+  }
+  
+  .desktop-nav {
+    display: flex !important;
+  }
+}
+
+/* Large desktop: 1024px and above */
+@media (min-width: 1024px) {
+  header > div {
+    padding: 0 2rem !important;
+  }
+  
+  main {
+    padding: 0 2rem !important;
+  }
+  
+  footer > div {
+    padding: 0 2rem !important;
+  }
+}
+
+/* Safe mobile menu styles */
+.mobile-menu-button {
+  display: none;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  color: white !important;
+  padding: 0.5rem !important;
+  cursor: pointer !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 40px !important;
+  height: 40px !important;
+  flex-shrink: 0 !important;
+}
+
+.mobile-menu {
+  display: none;
+  margin-top: 0.75rem;
+}
+
+.mobile-menu.open {
+  display: block;
+}
+
+/* Responsive grid for forms and content */
+@media (max-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* iPad Pro and larger tablets: 1024px - 1366px */
+@media (min-width: 769px) and (max-width: 1366px) {
+  header h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  header p {
+    font-size: 0.85rem !important;
+  }
+  
+  .desktop-nav a {
+    font-size: 0.9rem !important;
+    padding: 0.4rem 0.8rem !important;
+  }
+}
+
+/* Touch-friendly targets for mobile */
+@media (max-width: 768px) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  a, button {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
