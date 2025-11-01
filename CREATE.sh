@@ -1,34 +1,25 @@
 #!/bin/bash
-# fix-logo-path.sh
+# analyze-responsive-needs.sh
 
-echo "🔧 FIXING LOGO PATH IN COMPONENT"
+echo "📱 ANALYZING MOBILE RESPONSIVENESS NEEDS"
 
-# Update the path in Logo3D.jsx from absolute to relative
-echo "📝 Updating Logo3D.jsx path..."
-sed -i 's|modelPath="/ena-logo.glb"|modelPath="./ena-logo.glb"|g' app/components/layout/Logo3D.jsx
-
-# Verify the change
-echo "🔍 Verifying the change:"
-grep -A 2 -B 2 "modelPath" app/components/layout/Logo3D.jsx
-
-# Rebuild with the correct path
-echo "🚀 Rebuilding..."
-rm -rf docs/
-npm run build
-
-# Verify the GLB is still there
-echo "🔍 Checking build:"
-find docs/ -name "*.glb"
-
-# Deploy the fix
-echo "📦 Deploying fix..."
-git add .
-git commit -m "FIX: Use relative path for 3D logo"
-git push origin main
+echo "🔍 Checking current responsive elements:"
+grep -r "media\|responsive\|@media\|flex\|grid" app/styles/ --include="*.css" | head -10
 
 echo ""
-echo "✅ DEPLOYED!"
-echo "🌐 Check: https://gitinitaddcommitlog.github.io/MAPOL/"
+echo "📄 Checking viewport meta tag:"
+grep -r "viewport" public/index.html app/ --include="*.html" --include="*.jsx"
+
 echo ""
-echo "💡 The logo should now load from: ./ena-logo.glb (same directory)"
-echo "   Instead of: /ena-logo.glb (root domain)"
+echo "📱 Component structure analysis:"
+echo "Pages to make responsive:"
+find app/pages/ -name "*.jsx" -exec basename {} \; | sort
+
+echo ""
+echo "🎯 Key areas needing mobile optimization:"
+echo "   1. Header/Navigation"
+echo "   2. Dashboard layout"
+echo "   3. Form inputs and layout"
+echo "   4. 3D logo scaling"
+echo "   5. Footer layout"
+echo "   6. Table displays"
