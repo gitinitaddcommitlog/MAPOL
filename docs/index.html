@@ -25,6 +25,92 @@
             min-height: 100vh;
         }
         
+        /* Header Styles */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-3d {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #3B82F6, #8B5CF6);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: rotate 4s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        
+        .nav a:hover, .nav a.active {
+            background: rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Page Styles */
+        .page {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+        
+        .plastic { color: #10B981; }
+        .compliance { color: #3B82F6; }
+        .vessels { color: #F59E0B; }
+        
         .loading {
             display: flex;
             justify-content: center;
@@ -58,115 +144,326 @@
         </div>
     </div>
 
-    <script src="/app/component-bridge.js"></script>
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        const { useState, useEffect } = React;
         
-        // Component loader - dynamically loads your existing components
-        const ComponentLoader = ({ componentPath, fallback: FallbackComponent }) => {
-            const [Component, setComponent] = useState(null);
-            const [error, setError] = useState(null);
-            
-            useEffect(() => {
-                const loadComponent = async () => {
-                    try {
-                        console.log('Loading component:', componentPath);
-                        
-                        // Map component paths to your actual files
-                        const componentMap = {
-                            'Header': '/app/components/layout/Header.js',
-                            'Dashboard': '/app/pages/dashboard/Dashboard.js', 
-                            'MainForm': '/app/pages/forms/MainForm.js',
-                            'Reports': '/app/pages/reports/Reports.js',
-                            'Logo3D': '/app/components/layout/Logo3D.jsx'
-                        };
-                        
-                        // For now, use simple components. We'll enhance this to load actual files
-                        // Use the component bridge to load your actual components
-                        if (window.MARPOL_COMPONENTS && window.MARPOL_COMPONENTS[componentPath]) {
-                            setComponent(() => window.MARPOL_COMPONENTS[componentPath]);
-                        } else {
-                            throw new Error(`Component ${componentPath} not found in bridge`);
-                        }
-                        
-                        if (simpleComponents[componentPath]) {
-                            setComponent(() => simpleComponents[componentPath]);
-                        } else {
-                            throw new Error(`Component ${componentPath} not found`);
-                        }
-                        
-                    } catch (err) {
-                        console.error('Failed to load component:', err);
-                        setError(err);
-                    }
-                };
-                
-                loadComponent();
-            }, [componentPath]);
-            
-            if (error) {
-                return FallbackComponent ? React.createElement(FallbackComponent) 
-                    : React.createElement('div', { style: { color: 'red' } }, `Error loading ${componentPath}`);
-            }
-            
-            if (!Component) {
-                return FallbackComponent ? React.createElement(FallbackComponent)
-                    : React.createElement('div', null, `Loading ${componentPath}...`);
-            }
-            
-            return React.createElement(Component);
-        };
+        console.log('MARPOL App starting...');
         
-        // Main App Component - uses your existing component structure
+        // Header Component
+        function Header({ currentPage, onPageChange }) {
+            console.log('Rendering Header...');
+            return React.createElement('header', { className: 'header' },
+                React.createElement('div', { className: 'logo-section' },
+                    React.createElement('div', { className: 'logo-3d' }, '🌊'),
+                    React.createElement('div', null,
+                        React.createElement('h1', { 
+                            style: { margin: 0, fontSize: '1.5rem' } 
+                        }, 'MARPOL Compliance Manager'),
+                        React.createElement('p', { 
+                            style: { margin: 0, fontSize: '0.875rem', opacity: 0.8 } 
+                        }, 'IMO Waste Management System')
+                    )
+                ),
+                React.createElement('nav', { className: 'nav' },
+                    React.createElement('a', {
+                        href: '#',
+                        className: currentPage === 'dashboard' ? 'active' : '',
+                        onClick: (e) => { e.preventDefault(); onPageChange('dashboard'); }
+                    }, 'Dashboard'),
+                    React.createElement('a', {
+                        href: '#',
+                        className: currentPage === 'forms' ? 'active' : '',
+                        onClick: (e) => { e.preventDefault(); onPageChange('forms'); }
+                    }, 'Compliance Forms'),
+                    React.createElement('a', {
+                        href: '#',
+                        className: currentPage === 'reports' ? 'active' : '',
+                        onClick: (e) => { e.preventDefault(); onPageChange('reports'); }
+                    }, 'Waste Reports')
+                )
+            );
+        }
+        
+        // Dashboard Component
+        function Dashboard() {
+            console.log('Rendering Dashboard...');
+            return React.createElement('div', { className: 'page' },
+                React.createElement('h1', null, 'Waste Management Dashboard'),
+                React.createElement('div', { className: 'dashboard-grid' },
+                    React.createElement('div', { className: 'card' },
+                        React.createElement('h3', null, 'Annex V - Plastic Waste'),
+                        React.createElement('div', { className: 'stat-number plastic' }, '125 kg'),
+                        React.createElement('p', null, 'Monthly accumulation')
+                    ),
+                    React.createElement('div', { className: 'card' },
+                        React.createElement('h3', null, 'Compliance Score'),
+                        React.createElement('div', { className: 'stat-number compliance' }, '92%'),
+                        React.createElement('p', null, 'Overall rating')
+                    ),
+                    React.createElement('div', { className: 'card' },
+                        React.createElement('h3', null, 'Vessels Tracked'),
+                        React.createElement('div', { className: 'stat-number vessels' }, '47'),
+                        React.createElement('p', null, 'Active monitoring')
+                    )
+                ),
+                React.createElement('div', { className: 'card', style: { marginTop: '2rem' } },
+                    React.createElement('h2', null, 'Recent Activity'),
+                    React.createElement('div', { style: { marginTop: '1rem' } },
+                        React.createElement('div', { 
+                            style: { 
+                                padding: '1rem', 
+                                borderBottom: '1px solid rgba(255,255,255,0.1)' 
+                            } 
+                        },
+                            React.createElement('strong', null, 'Ocean Guardian'),
+                            React.createElement('div', { style: { fontSize: '0.875rem', opacity: 0.8 } },
+                                'Plastic waste disposal - 25kg'
+                            ),
+                            React.createElement('div', { style: { fontSize: '0.875rem', color: '#10B981', marginTop: '0.5rem' } },
+                                'Completed - 2024-01-15'
+                            )
+                        ),
+                        React.createElement('div', { 
+                            style: { 
+                                padding: '1rem', 
+                                borderBottom: '1px solid rgba(255,255,255,0.1)' 
+                            } 
+                        },
+                            React.createElement('strong', null, 'Sea Explorer'),
+                            React.createElement('div', { style: { fontSize: '0.875rem', opacity: 0.8 } },
+                                'Oil waste processing - 50L'
+                            ),
+                            React.createElement('div', { style: { fontSize: '0.875rem', color: '#F59E0B', marginTop: '0.5rem' } },
+                                'In Progress - 2024-01-14'
+                            )
+                        )
+                    )
+                )
+            );
+        }
+        
+        // Forms Component
+        function Forms() {
+            console.log('Rendering Forms...');
+            const [formData, setFormData] = useState({
+                vesselName: '',
+                wasteType: 'plastic',
+                quantity: '',
+                date: new Date().toISOString().split('T')[0]
+            });
+            
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                alert(`Waste Report Submitted!\n\nVessel: ${formData.vesselName}\nWaste Type: ${formData.wasteType}\nQuantity: ${formData.quantity}kg`);
+                setFormData({
+                    vesselName: '',
+                    wasteType: 'plastic',
+                    quantity: '',
+                    date: new Date().toISOString().split('T')[0]
+                });
+            };
+            
+            return React.createElement('div', { className: 'page' },
+                React.createElement('h1', null, 'MARPOL Compliance Forms'),
+                React.createElement('div', { 
+                    className: 'card',
+                    style: { maxWidth: '600px' }
+                },
+                    React.createElement('h2', null, 'Garbage Record Book (Annex V)'),
+                    React.createElement('form', { onSubmit: handleSubmit },
+                        React.createElement('div', { 
+                            style: { 
+                                display: 'grid', 
+                                gap: '1rem',
+                                marginTop: '1rem'
+                            } 
+                        },
+                            React.createElement('div', null,
+                                React.createElement('label', { 
+                                    htmlFor: 'vesselName',
+                                    style: { display: 'block', marginBottom: '0.5rem', fontWeight: '500' }
+                                }, 'Vessel Name'),
+                                React.createElement('input', {
+                                    type: 'text',
+                                    id: 'vesselName',
+                                    value: formData.vesselName,
+                                    onChange: (e) => setFormData({...formData, vesselName: e.target.value}),
+                                    style: { 
+                                        width: '100%', 
+                                        padding: '0.75rem',
+                                        border: '1px solid rgba(255,255,255,0.2)',
+                                        borderRadius: '4px',
+                                        background: 'rgba(255,255,255,0.1)',
+                                        color: 'white',
+                                        fontSize: '1rem'
+                                    },
+                                    required: true,
+                                    placeholder: 'Enter vessel name'
+                                })
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('label', { 
+                                    htmlFor: 'wasteType',
+                                    style: { display: 'block', marginBottom: '0.5rem', fontWeight: '500' }
+                                }, 'Waste Type'),
+                                React.createElement('select', {
+                                    id: 'wasteType',
+                                    value: formData.wasteType,
+                                    onChange: (e) => setFormData({...formData, wasteType: e.target.value}),
+                                    style: { 
+                                        width: '100%', 
+                                        padding: '0.75rem',
+                                        border: '1px solid rgba(255,255,255,0.2)',
+                                        borderRadius: '4px',
+                                        background: 'rgba(255,255,255,0.1)',
+                                        color: 'white',
+                                        fontSize: '1rem'
+                                    }
+                                },
+                                    React.createElement('option', { value: 'plastic' }, 'Plastic'),
+                                    React.createElement('option', { value: 'oil' }, 'Oil'),
+                                    React.createElement('option', { value: 'chemical' }, 'Chemical'),
+                                    React.createElement('option', { value: 'sewage' }, 'Sewage')
+                                )
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('label', { 
+                                    htmlFor: 'quantity',
+                                    style: { display: 'block', marginBottom: '0.5rem', fontWeight: '500' }
+                                }, 'Quantity (kg)'),
+                                React.createElement('input', {
+                                    type: 'number',
+                                    id: 'quantity',
+                                    value: formData.quantity,
+                                    onChange: (e) => setFormData({...formData, quantity: e.target.value}),
+                                    style: { 
+                                        width: '100%', 
+                                        padding: '0.75rem',
+                                        border: '1px solid rgba(255,255,255,0.2)',
+                                        borderRadius: '4px',
+                                        background: 'rgba(255,255,255,0.1)',
+                                        color: 'white',
+                                        fontSize: '1rem'
+                                    },
+                                    required: true,
+                                    placeholder: 'Enter quantity'
+                                })
+                            ),
+                            React.createElement('button', {
+                                type: 'submit',
+                                style: {
+                                    background: '#3B82F6',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '1rem 2rem',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    fontSize: '1rem',
+                                    fontWeight: '500',
+                                    marginTop: '1rem'
+                                }
+                            }, 'Submit Waste Report')
+                        )
+                    )
+                )
+            );
+        }
+        
+        // Reports Component
+        function Reports() {
+            console.log('Rendering Reports...');
+            const [reports] = useState([
+                { id: 1, vessel: 'Ocean Guardian', type: 'Plastic', quantity: '125kg', date: '2024-01-15', status: 'Completed' },
+                { id: 2, vessel: 'Sea Explorer', type: 'Oil', quantity: '50L', date: '2024-01-14', status: 'Pending' },
+                { id: 3, vessel: 'Marine Protector', type: 'Chemical', quantity: '25kg', date: '2024-01-13', status: 'Completed' }
+            ]);
+            
+            return React.createElement('div', { className: 'page' },
+                React.createElement('h1', null, 'Waste Management Reports'),
+                React.createElement('div', { className: 'card' },
+                    React.createElement('h2', null, 'Waste Disposal History'),
+                    React.createElement('div', { style: { marginTop: '1rem' } },
+                        reports.map(report => 
+                            React.createElement('div', {
+                                key: report.id,
+                                style: {
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    padding: '1rem',
+                                    borderBottom: '1px solid rgba(255,255,255,0.1)'
+                                }
+                            },
+                                React.createElement('div', null,
+                                    React.createElement('strong', null, report.vessel),
+                                    React.createElement('div', { style: { fontSize: '0.875rem', opacity: 0.8 } },
+                                        `${report.type} • ${report.quantity}`
+                                    )
+                                ),
+                                React.createElement('div', { style: { textAlign: 'right' } },
+                                    React.createElement('div', { style: { fontSize: '0.875rem' } }, report.date),
+                                    React.createElement('div', { 
+                                        style: { 
+                                            fontSize: '0.875rem',
+                                            color: report.status === 'Completed' ? '#10B981' : '#F59E0B'
+                                        } 
+                                    }, report.status)
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+        
+        // Main App Component
         function App() {
             const [currentPage, setCurrentPage] = useState('dashboard');
+            const [isLoaded, setIsLoaded] = useState(false);
             
             useEffect(() => {
-                const handleNavigate = (event) => {
-                    setCurrentPage(event.detail);
-                };
-                
-                window.addEventListener('navigate', handleNavigate);
-                return () => window.removeEventListener('navigate', handleNavigate);
+                console.log('App mounted, setting loaded state...');
+                // Simulate loading completion
+                setTimeout(() => {
+                    setIsLoaded(true);
+                    console.log('App fully loaded!');
+                }, 100);
             }, []);
             
             const renderPage = () => {
+                console.log('Rendering page:', currentPage);
                 switch (currentPage) {
                     case 'dashboard': 
-                        return React.createElement(ComponentLoader, { 
-                            componentPath: 'Dashboard',
-                            fallback: () => React.createElement('div', null, 'Loading Dashboard...')
-                        });
+                        return React.createElement(Dashboard);
                     case 'forms':
-                        return React.createElement(ComponentLoader, {
-                            componentPath: 'MainForm', 
-                            fallback: () => React.createElement('div', null, 'Loading Forms...')
-                        });
+                        return React.createElement(Forms);
                     case 'reports':
-                        return React.createElement(ComponentLoader, {
-                            componentPath: 'Reports',
-                            fallback: () => React.createElement('div', null, 'Loading Reports...')
-                        });
+                        return React.createElement(Reports);
                     default:
-                        return React.createElement(ComponentLoader, {
-                            componentPath: 'Dashboard',
-                            fallback: () => React.createElement('div', null, 'Loading...')
-                        });
+                        return React.createElement(Dashboard);
                 }
             };
             
+            if (!isLoaded) {
+                return React.createElement('div', { className: 'loading' },
+                    React.createElement('div', { className: 'spinner' }),
+                    React.createElement('div', null, 'Loading MARPOL Application...')
+                );
+            }
+            
             return React.createElement('div', null,
-                React.createElement(ComponentLoader, {
-                    componentPath: 'Header',
-                    fallback: () => React.createElement('div', null, 'Loading Header...')
+                React.createElement(Header, { 
+                    currentPage, 
+                    onPageChange: setCurrentPage 
                 }),
                 renderPage()
             );
         }
         
         // Render the app
-        console.log('Rendering MARPOL Application...');
+        console.log('Starting ReactDOM render...');
         ReactDOM.render(React.createElement(App), document.getElementById('root'));
+        console.log('ReactDOM render completed!');
     </script>
 </body>
 </html>

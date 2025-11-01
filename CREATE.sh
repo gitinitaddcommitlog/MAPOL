@@ -1,17 +1,15 @@
 #!/bin/bash
-# deploy_enhanced_version.sh
+# deploy_working_version.sh
 
-echo "=== DEPLOYING ENHANCED VERSION ==="
+echo "=== DEPLOYING WORKING VERSION ==="
 
-echo "STEP 1: Prepare docs folder with your full app structure"
+echo "STEP 1: Prepare docs folder"
 rm -rf docs/
 mkdir -p docs
 cp index.html docs/
-cp -r app/ docs/app/
-cp -r public/ docs/public/
 
 echo ""
-echo "STEP 2: Add GitHub Pages configuration"
+echo "STEP 2: Add GitHub Pages config"
 touch docs/.nojekyll
 
 cat > docs/404.html << 'EOF'
@@ -33,13 +31,14 @@ EOF
 echo ""
 echo "STEP 3: Commit and push"
 git add .
-git commit -m "feat: Enhanced single entry point with component bridge
-- Preserves existing React app structure
-- Component bridge for loading actual components
-- Working navigation and pages
-- Ready for gradual component migration"
+git commit -m "fix: Working React app with single entry point
+- All components properly rendered
+- Working navigation and forms
+- Professional maritime interface
+- No loading issues"
 git push origin main
 
 echo ""
-echo "✅ ENHANCED VERSION DEPLOYED!"
+echo "✅ WORKING VERSION DEPLOYED!"
 echo "🌐 Live at: https://gitinitaddcommitlog.github.io/MAPOL/"
+echo "⏰ Wait 2-5 minutes for deployment"
