@@ -13,7 +13,7 @@ export default defineConfig({
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
-  base: './',
+  base: './',  // CRITICAL for GitHub Pages
   build: {
     outDir: resolve(__dirname, 'docs'),
     assetsDir: 'assets',
