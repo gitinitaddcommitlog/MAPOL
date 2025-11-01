@@ -1,24 +1,24 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
 
 const Logo3D = () => {
+  const group = useRef();
+  
+  // Load model without showing loader
+  const { scene } = useGLTF('/logo.glb');
+  
+  // Auto-rotate
+  useFrame((state, delta) => {
+    if (group.current) {
+      group.current.rotation.y += delta * 0.5;
+    }
+  });
+
   return (
-    <div style={{
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #00a8cc 0%, #00d4aa 100%)',
-      borderRadius: '12px',
-      color: 'white',
-      fontWeight: 'bold',
-      fontSize: '12px',
-      textAlign: 'center',
-      padding: '8px',
-      border: '2px solid rgba(255,255,255,0.3)'
-    }}>
-      ENA LOGO
-    </div>
+    <group ref={group}>
+      <primitive object={scene} scale={1} />
+    </group>
   );
 };
 

@@ -1,13 +1,9 @@
 #!/bin/bash
-# FIX-HEADER-LAYOUT.sh - Fix Logo Container Height
+# CREATE.sh - Fix Navigation for All Devices
 
-echo "🎨 FIXING HEADER LAYOUT - CONTAINING THE LOGO"
+echo "🔧 CREATING PROPER RESPONSIVE NAVIGATION"
 
-# 1. First, let's check the current header structure
-echo "🔍 Current header structure:"
-grep -A 10 -B 5 "header-logo-container" app/components/layout/Header.jsx
-
-# 2. Fix the CSS to reduce logo container height and improve header layout
+# 1. Fix CSS with proper responsive design
 cat > app/styles/globals.css << 'EOF'
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -61,18 +57,7 @@ body {
   min-height: 100vh;
 }
 
-/* ===== FIXED HEADER STYLES ===== */
-header {
-  background: var(--gradient-primary);
-  padding: 0.75rem 0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 100;
-  min-height: 80px;
-  display: flex;
-  align-items: center;
-}
-
+/* HEADER STYLES */
 .header-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -80,67 +65,44 @@ header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  width: 100%;
 }
 
-/* ===== FIXED LOGO CONTAINER ===== */
 .header-logo-container {
-  width: 60px;  /* Reduced from 120px */
-  height: 60px; /* Reduced from 120px */
+  width: 120px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin: 0;
-  padding: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-.header-logo-container canvas,
-.header-logo-container div {
+.header-logo-container canvas {
   width: 100% !important;
   height: 100% !important;
   display: block !important;
-  border-radius: 8px;
-}
-
-/* ===== BRAND TEXT ===== */
-.header-brand {
-  flex: 1;
-  min-width: 0;
-  margin-left: 0.5rem;
 }
 
 .header-title {
   margin: 0;
-  font-size: 1.5rem; /* Slightly smaller */
+  font-size: 1.75rem;
   font-weight: 700;
   color: white;
   line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .header-subtitle {
   margin: 2px 0 0 0;
-  font-size: 0.8rem; /* Slightly smaller */
+  font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-/* ===== DESKTOP NAVIGATION ===== */
+/* DESKTOP NAVIGATION */
 .desktop-nav {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   align-items: center;
   margin-left: auto;
-  flex-shrink: 0;
 }
 
 .desktop-nav a {
@@ -161,7 +123,7 @@ header {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* ===== MOBILE HAMBURGER MENU ===== */
+/* MOBILE HAMBURGER MENU */
 .mobile-nav-toggle {
   display: none;
   background: none;
@@ -216,8 +178,8 @@ header {
 
 .mobile-nav-close {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 2rem;
+  right: 2rem;
   background: none;
   border: none;
   color: white;
@@ -226,53 +188,43 @@ header {
   padding: 0.5rem;
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/* Enhanced responsive design */
 @media (max-width: 1024px) {
   .header-container {
     padding: 0 1.5rem;
   }
   
   .header-logo-container {
-    width: 55px;
-    height: 55px;
+    width: 100px;
+    height: 100px;
   }
   
   .header-title {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
   
   .desktop-nav {
-    gap: 0.75rem;
+    gap: 1rem;
   }
 }
 
 @media (max-width: 768px) {
-  header {
-    padding: 0.5rem 0;
-    min-height: 70px;
-  }
-  
   .header-container {
     padding: 0 1rem;
     gap: 0.5rem;
   }
   
   .header-logo-container {
-    width: 50px;
-    height: 50px;
-    padding: 3px;
-  }
-  
-  .header-brand {
-    margin-left: 0.25rem;
+    width: 80px;
+    height: 80px;
   }
   
   .header-title {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
   
   .header-subtitle {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
   }
   
   /* Hide desktop nav on mobile */
@@ -295,36 +247,6 @@ header {
   .mobile-nav {
     display: none !important;
   }
-}
-
-/* ===== ENHANCED FEATURES ===== */
-/* ... rest of your existing enhanced CSS ... */
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin: 2rem 0;
-}
-
-.stat-card {
-  text-align: center;
-  padding: 1.5rem;
-  border-radius: 12px;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #3b82f6;
-}
-
-.stat-value {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.stat-label {
-  color: #64748b;
-  font-weight: 500;
 }
 
 /* Container */
@@ -399,7 +321,7 @@ header {
 }
 EOF
 
-# 3. Also update the Header component to use the new structure
+# 2. Create a new Header component with proper responsive navigation
 cat > app/components/layout/Header.jsx << 'EOF'
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -464,15 +386,25 @@ const Header = () => {
   ];
 
   return (
-    <header>
+    <header style={{
+      background: 'var(--gradient-primary)',
+      padding: '1rem 0',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      position: 'relative',
+      zIndex: 100
+    }}>
       <div className="header-container">
-        {/* Logo - Now properly contained */}
+        {/* Logo */}
         <div className="header-logo-container">
           <Logo3D />
         </div>
         
         {/* Brand */}
-        <div className="header-brand">
+        <div style={{
+          flex: 1,
+          minWidth: 0,
+          marginLeft: '0.75rem'
+        }}>
           <Link 
             to="/" 
             style={{ textDecoration: 'none' }}
@@ -580,37 +512,153 @@ const Header = () => {
 export default Header;
 EOF
 
-echo "✅ HEADER LAYOUT FIXED!"
-echo ""
-echo "🎯 CHANGES MADE:"
-echo "• Reduced logo container from 120px to 60px"
-echo "• Added proper header min-height"
-echo "• Improved responsive sizing"
-echo "• Better logo container styling"
-echo "• Fixed header alignment"
+# 3. Ensure App.jsx has proper HashRouter setup
+cat > app/App.jsx << 'EOF'
+import React from 'react';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/layout/Header.jsx';
+import Dashboard from './pages/dashboard/Dashboard.jsx';
+import MainForm from './pages/forms/MainForm.jsx';
+import Reports from './pages/reports/Reports.jsx';
+import './styles/globals.css';
 
-# 4. Build and test
-echo ""
-echo "🔨 Testing build..."
+function App() {
+  return (
+    <Router>
+      <div style={{ 
+        minHeight: '100vh', 
+        background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%)',
+        backgroundAttachment: 'fixed'
+      }}>
+        <Header />
+        <main style={{ padding: '0', minHeight: 'calc(100vh - 200px)' }}>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/form" element={<MainForm />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="*" element={<Dashboard />} />
+          </Routes>
+        </main>
+        
+        <footer style={{
+          background: 'var(--gradient-primary)',
+          color: 'white',
+          padding: '3rem 0 1.5rem',
+          marginTop: 'auto',
+          borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+        }}>
+          <div style={{ 
+            maxWidth: '1200px', 
+            margin: '0 auto', 
+            padding: '0 2rem' 
+          }}>
+            <div className="footer-grid" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '3rem',
+              marginBottom: '2rem'
+            }}>
+              <div>
+                <h4 style={{ 
+                  marginBottom: '1rem', 
+                  opacity: 0.9,
+                  fontSize: '1.1rem',
+                  fontWeight: '600'
+                }}>
+                  ENA Waste Management Ltd.
+                </h4>
+                <p style={{ 
+                  opacity: 0.7, 
+                  lineHeight: 1.6,
+                  fontSize: '0.9rem'
+                }}>
+                  Professional maritime waste management solutions ensuring full MARPOL 73/78 compliance and environmental protection.
+                </p>
+              </div>
+              <div>
+                <h4 style={{ 
+                  marginBottom: '1rem', 
+                  opacity: 0.9,
+                  fontSize: '1.1rem',
+                  fontWeight: '600'
+                }}>
+                  Contact Info
+                </h4>
+                <p style={{ opacity: 0.7, marginBottom: '0.5rem' }}>📍 Tema Kpone Car Park</p>
+                <p style={{ opacity: 0.7, marginBottom: '0.5rem' }}>📦 P.O. BOX GP 4369, Accra</p>
+                <p style={{ opacity: 0.7 }}>📞 0244316155, 024272684, 0558674185</p>
+              </div>
+              <div>
+                <h4 style={{ 
+                  marginBottom: '1rem', 
+                  opacity: 0.9,
+                  fontSize: '1.1rem',
+                  fontWeight: '600'
+                }}>
+                  Compliance
+                </h4>
+                <p style={{ 
+                  opacity: 0.7, 
+                  lineHeight: 1.6,
+                  fontSize: '0.9rem'
+                }}>
+                  Under regulations of MARPOL 73/78 and Ghana Ports and Harbours Authority Declaration
+                </p>
+              </div>
+            </div>
+            
+            <div style={{
+              borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+              paddingTop: '1.5rem',
+              textAlign: 'center',
+              opacity: 0.7
+            }}>
+              <p style={{ 
+                margin: 0,
+                fontSize: '0.85rem'
+              }}>
+                © 2024 ENA Waste Management Ltd. All rights reserved. | MARPOL Compliance System v2.0
+              </p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+EOF
+
+# 4. Build and deploy
+echo "🔨 Building application..."
 npm run build
 
 if [ $? -eq 0 ]; then
-    echo "✅ Build successful!"
-    echo ""
-    echo "🚀 Deploying fixed header..."
+    echo "✅ Build successful"
+    
+    # Deploy
+    echo "📦 Deploying..."
     git add .
-    git commit -m "FIX: Header layout - reduced logo size and improved containment"
+    git commit -m "FEAT: Professional responsive navigation with hamburger menu"
     git push origin main
+    
     echo ""
-    echo "🎉 DEPLOYED!"
+    echo "🎉 DEPLOYMENT COMPLETE!"
     echo "🌐 Check: https://gitinitaddcommitlog.github.io/MAPOL/"
     echo ""
-    echo "The logo should now be properly contained within the header!"
+    echo "📱 Responsive Features:"
+    echo "   • Desktop: Horizontal navigation bar"
+    echo "   • Tablet: Adjusted spacing"
+    echo "   • Mobile: Hamburger menu with full-screen overlay"
+    echo "   • Smooth animations and proper active states"
+    echo "   • Body scroll lock when menu is open"
 else
     echo "❌ Build failed"
-    echo "Check the errors above and fix manually"
+    exit 1
 fi
 EOF
 
-chmod +x FIX-HEADER-LAYOUT.sh
-./FIX-HEADER-LAYOUT.sh
+# Make executable and run
+chmod +x CREATE.sh
+./CREATE.sh
