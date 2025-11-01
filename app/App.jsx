@@ -11,99 +11,30 @@ function App() {
     <Router>
       <div style={{ 
         minHeight: '100vh', 
-        background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%)',
-        backgroundAttachment: 'fixed'
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)' 
       }}>
         <Header />
-        <main style={{ padding: '0', minHeight: 'calc(100vh - 200px)' }}>
+        <main>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/form" element={<MainForm />} />
             <Route path="/reports" element={<Reports />} />
-            <Route path="*" element={<Dashboard />} />
           </Routes>
         </main>
-        
         <footer style={{
           background: 'var(--gradient-primary)',
           color: 'white',
-          padding: '3rem 0 1.5rem',
-          marginTop: 'auto',
-          borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+          padding: '2rem 1rem',
+          marginTop: '3rem',
+          textAlign: 'center'
         }}>
-          <div style={{ 
-            maxWidth: '1200px', 
-            margin: '0 auto', 
-            padding: '0 2rem' 
-          }}>
-            <div className="footer-grid" style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-              gap: '3rem',
-              marginBottom: '2rem'
-            }}>
-              <div>
-                <h4 style={{ 
-                  marginBottom: '1rem', 
-                  opacity: 0.9,
-                  fontSize: '1.1rem',
-                  fontWeight: '600'
-                }}>
-                  ENA Waste Management Ltd.
-                </h4>
-                <p style={{ 
-                  opacity: 0.7, 
-                  lineHeight: 1.6,
-                  fontSize: '0.9rem'
-                }}>
-                  Professional maritime waste management solutions ensuring full MARPOL 73/78 compliance and environmental protection.
-                </p>
-              </div>
-              <div>
-                <h4 style={{ 
-                  marginBottom: '1rem', 
-                  opacity: 0.9,
-                  fontSize: '1.1rem',
-                  fontWeight: '600'
-                }}>
-                  Contact Info
-                </h4>
-                <p style={{ opacity: 0.7, marginBottom: '0.5rem' }}>📍 Tema Kpone Car Park</p>
-                <p style={{ opacity: 0.7, marginBottom: '0.5rem' }}>📦 P.O. BOX GP 4369, Accra</p>
-                <p style={{ opacity: 0.7 }}>📞 0244316155, 024272684, 0558674185</p>
-              </div>
-              <div>
-                <h4 style={{ 
-                  marginBottom: '1rem', 
-                  opacity: 0.9,
-                  fontSize: '1.1rem',
-                  fontWeight: '600'
-                }}>
-                  Compliance
-                </h4>
-                <p style={{ 
-                  opacity: 0.7, 
-                  lineHeight: 1.6,
-                  fontSize: '0.9rem'
-                }}>
-                  Under regulations of MARPOL 73/78 and Ghana Ports and Harbours Authority Declaration
-                </p>
-              </div>
-            </div>
-            
-            <div style={{
-              borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-              paddingTop: '1.5rem',
-              textAlign: 'center',
-              opacity: 0.7
-            }}>
-              <p style={{ 
-                margin: 0,
-                fontSize: '0.85rem'
-              }}>
-                © 2024 ENA Waste Management Ltd. All rights reserved. | MARPOL Compliance System v2.0
-              </p>
-            </div>
+          <div className="container">
+            <p style={{ margin: 0, opacity: 0.9 }}>
+              © 2024 ENA Waste Management Ltd. | MARPOL Compliance System v2.0
+            </p>
+            <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem', opacity: 0.7 }}>
+              Tema Kpone Car Park | P.O. BOX GP 4369, Accra
+            </p>
           </div>
         </footer>
       </div>
