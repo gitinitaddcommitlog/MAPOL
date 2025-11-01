@@ -1,15 +1,15 @@
 #!/bin/bash
-# update_github_pages.sh
+# deploy_simple_version.sh
 
-echo "=== UPDATING GITHUB PAGES ==="
+echo "=== DEPLOYING SIMPLE VERSION TO GITHUB PAGES ==="
 
-echo "STEP 1: Update docs folder with working version"
+echo "STEP 1: Update docs folder"
 rm -rf docs/
 mkdir -p docs
 cp index.html docs/
 
 echo ""
-echo "STEP 2: Add GitHub Pages configuration"
+echo "STEP 2: Add GitHub Pages config"
 touch docs/.nojekyll
 
 cat > docs/404.html << 'EOF'
@@ -31,14 +31,15 @@ EOF
 echo ""
 echo "STEP 3: Commit and push"
 git add .
-git commit -m "fix: Working static version with embedded React
-- Single HTML file with everything included
-- Working 3D visualization with simple cube
-- No external dependencies or module loading issues
-- Proper navigation between pages"
+git commit -m "deploy: Simple working version
+- Pure HTML/CSS/JS - no frameworks
+- Working navigation and forms
+- Animated 3D-style logo
+- Professional maritime design
+- Immediate loading, no dependencies"
 git push origin main
 
 echo ""
-echo "✅ GITHUB PAGES UPDATED!"
+echo "✅ SIMPLE VERSION DEPLOYED!"
 echo "🌐 Live at: https://gitinitaddcommitlog.github.io/MAPOL/"
 echo "⏰ Wait 2-5 minutes for deployment"
