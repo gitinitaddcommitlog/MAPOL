@@ -386,3 +386,27 @@ header {
   outline: none;
   border-color: var(--secondary-color);
 }
+
+/* Additional header refinements */
+.header-logo-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+}
+
+/* Ensure header stays compact */
+header {
+    display: flex !important;
+    align-items: center !important;
+    height: auto !important;
+    min-height: 80px !important;
+}
+
+/* Mobile header adjustments */
+@media (max-width: 768px) {
+    header {
+        min-height: 70px !important;
+        padding: 0.5rem 0 !important;
+    }
+}
