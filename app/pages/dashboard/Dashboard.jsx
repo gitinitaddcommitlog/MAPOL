@@ -1,154 +1,108 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
   const stats = [
-    { label: 'Total Reports', value: '24', change: '+12%' },
-    { label: 'Pending Forms', value: '8', change: '-3%' },
-    { label: 'Completed', value: '16', change: '+5%' },
-    { label: 'Compliance Rate', value: '92%', change: '+2%' }
+    { label: 'Total Forms Today', value: '12', color: '#10b981' },
+    { label: 'Pending Approvals', value: '3', color: '#f59e0b' },
+    { label: 'Completed Reports', value: '45', color: '#3b82f6' },
+    { label: 'Vessels Served', value: '8', color: '#8b5cf6' }
   ];
 
-  const quickActions = [
-    { label: 'New Waste Form', icon: '📝', link: '/form' },
-    { label: 'View Reports', icon: '📊', link: '/reports' },
-    { label: 'Compliance Check', icon: '✅', link: '#' },
-    { label: 'Export Data', icon: '📤', link: '#' }
+  const recentActivities = [
+    { vessel: 'MV Atlantic Star', action: 'Waste Form Submitted', time: '2 hours ago', status: 'completed' },
+    { vessel: 'MV Ocean Queen', action: 'Oil Waste Declaration', time: '4 hours ago', status: 'pending' },
+    { vessel: 'MV Sea Explorer', action: 'Plastic Waste Form', time: '1 day ago', status: 'completed' }
   ];
+
+  const handleQuickAction = (action) => {
+    switch(action) {
+      case 'form':
+        navigate('/form');
+        break;
+      case 'reports':
+        navigate('/reports');
+        break;
+      case 'settings':
+        alert('Settings feature coming soon!');
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
-    <div className="dashboard-container" style={{ 
-      minHeight: 'calc(100vh - 200px)',
-      padding: '2rem 0'
-    }}>
-      <div className="container">
-        {/* Welcome Section */}
-        <section style={{ 
-          marginBottom: '3rem',
-          textAlign: 'center'
-        }}>
-          <h1 style={{
-            background: 'var(--gradient-primary)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            marginBottom: '1rem',
-            fontWeight: '700',
-            fontSize: '2.5rem'
-          }}>
-            MARPOL Compliance Dashboard
-          </h1>
-          <p style={{
-            color: '#64748b',
-            maxWidth: '600px',
-            margin: '0 auto',
-            lineHeight: '1.6',
-            fontSize: '1.125rem'
-          }}>
-            Monitor waste management compliance, track reports, and ensure environmental protection standards.
-          </p>
-        </section>
+    <div className="container">
+      <div style={{ marginBottom: '2rem' }}>
+        <h1>Dashboard Overview</h1>
+        <p>Welcome to ENA Waste Management MARPOL Compliance System</p>
+      </div>
 
-        {/* Stats Grid */}
-        <section style={{ marginBottom: '3rem' }}>
-          <h2 style={{
-            fontSize: '1.5rem',
-            marginBottom: '1.5rem',
-            color: '#1e293b'
-          }}>
-            Overview
-          </h2>
-          <div className="stats-grid" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '1.5rem'
-          }}>
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                className="card"
-                style={{
-                  textAlign: 'center',
-                  padding: '2rem 1.5rem'
-                }}
-              >
-                <div style={{
-                  fontSize: '2rem',
-                  fontWeight: '700',
-                  color: '#1e293b',
-                  marginBottom: '0.5rem'
-                }}>
-                  {stat.value}
-                </div>
-                <div style={{
-                  color: '#64748b',
-                  fontSize: '0.9rem',
-                  marginBottom: '0.5rem'
-                }}>
-                  {stat.label}
-                </div>
-                <div style={{
-                  color: stat.change.startsWith('+') ? '#10b981' : '#ef4444',
-                  fontSize: '0.8rem',
-                  fontWeight: '600'
-                }}>
-                  {stat.change}
+      {/* Stats Grid */}
+      <div className="stats-grid">
+        {stats.map((stat, index) => (
+          <div key={index} className="stat-card" style={{ borderLeftColor: stat.color }}>
+            <div className="stat-value" style={{ color: stat.color }}>
+              {stat.value}
+            </div>
+            <div className="stat-label">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+        gap: '2rem'
+      }}>
+        {/* Quick Actions - NOW FUNCTIONAL */}
+        <div className="card">
+          <h2 style={{ marginBottom: '1.5rem' }}>Quick Actions</h2>
+          <div className="quick-actions">
+            <button 
+              className="btn-primary" 
+              style={{ justifyContent: 'center' }}
+              onClick={() => handleQuickAction('form')}
+            >
+              📝 Create New Waste Form
+            </button>
+            <button 
+              className="btn-secondary"
+              onClick={() => handleQuickAction('reports')}
+            >
+              📊 Generate Report
+            </button>
+            <button 
+              className="btn-accent"
+              onClick={() => handleQuickAction('settings')}
+            >
+              ⚙️ System Settings
+            </button>
+          </div>
+        </div>
+
+        {/* Recent Activity */}
+        <div className="card">
+          <h2 style={{ marginBottom: '1.5rem' }}>Recent Activity</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {recentActivities.map((activity, index) => (
+              <div key={index} className="activity-item">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                  <div>
+                    <strong>{activity.vessel}</strong>
+                    <p style={{ margin: '0.25rem 0', color: '#64748b' }}>{activity.action}</p>
+                    <small style={{ color: '#94a3b8' }}>{activity.time}</small>
+                  </div>
+                  <span className={`status-badge status-${activity.status}`}>
+                    {activity.status}
+                  </span>
                 </div>
               </div>
             ))}
           </div>
-        </section>
-
-        {/* Quick Actions */}
-        <section>
-          <h2 style={{
-            fontSize: '1.5rem',
-            marginBottom: '1.5rem',
-            color: '#1e293b'
-          }}>
-            Quick Actions
-          </h2>
-          <div className="actions-grid" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1.5rem'
-          }}>
-            {quickActions.map((action, index) => (
-              <a
-                key={index}
-                href={action.link}
-                className="card"
-                style={{
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  padding: '2rem 1.5rem',
-                  transition: 'all 0.3s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = 'var(--shadow-xl)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
-                }}
-              >
-                <span style={{ fontSize: '2.5rem' }}>{action.icon}</span>
-                <span style={{
-                  fontWeight: '600',
-                  color: '#1e293b',
-                  textAlign: 'center',
-                  fontSize: '1rem'
-                }}>
-                  {action.label}
-                </span>
-              </a>
-            ))}
-          </div>
-        </section>
+        </div>
       </div>
     </div>
   );

@@ -10,30 +10,48 @@ const Header = () => {
     return location.hash === `#${path}` || (path === '/' && location.hash === '');
   };
 
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  // Close mobile menu when route changes
   useEffect(() => {
     closeMobileMenu();
   }, [location]);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
   const navLinks = [
-    { path: '/', label: 'Dashboard' },
-    { path: '/form', label: 'Forms' },
-    { path: '/reports', label: 'Reports' }
+    { path: '/', label: 'Dashboard', icon: '📊' },
+    { path: '/form', label: 'Waste Forms', icon: '📝' },
+    { path: '/reports', label: 'Reports', icon: '📈' }
   ];
 
   return (
     <header>
       <div className="header-container">
-        {/* Logo - Now properly contained */}
+        {/* Logo */}
         <div className="header-logo-container">
           <Logo3D />
         </div>
         
         {/* Brand */}
         <div className="header-brand">
-          <Link to="/" style={{ textDecoration: 'none' }} onClick={closeMobileMenu}>
+          <Link to="/" style={{ textDecoration: 'none' }}>
             <h1 className="header-title">ENA Waste Management</h1>
             <p className="header-subtitle">MARPOL Compliance System</p>
           </Link>
@@ -53,15 +71,37 @@ const Header = () => {
         </nav>
 
         {/* Mobile Navigation Toggle */}
-        <button className="mobile-nav-toggle" onClick={toggleMobileMenu}>
+        <button 
+          className="mobile-nav-toggle"
+          onClick={toggleMobileMenu}
+          aria-label="Toggle mobile menu"
+        >
           ☰
         </button>
 
-        {/* Mobile Navigation Menu */}
+        {/* Mobile Navigation Overlay */}
+        <div 
+          className={`mobile-nav-overlay ${isMobileMenuOpen ? 'open' : ''}`}
+          onClick={closeMobileMenu}
+        ></div>
+
+        {/* Mobile Navigation Menu - SIDE PANEL */}
         <nav className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
-          <button className="mobile-nav-close" onClick={closeMobileMenu}>
+          <button 
+            className="mobile-nav-close"
+            onClick={closeMobileMenu}
+            aria-label="Close mobile menu"
+          >
             ✕
           </button>
+          
+          {/* Mobile Menu Header */}
+          <div className="mobile-nav-header">
+            <div className="mobile-nav-title">ENA Waste Management</div>
+            <div className="mobile-nav-subtitle">MARPOL Compliance</div>
+          </div>
+          
+          {/* Mobile Menu Links - BOLD CONTENT */}
           {navLinks.map(link => (
             <Link
               key={link.path}
@@ -69,7 +109,7 @@ const Header = () => {
               className={isActive(link.path) ? 'active' : ''}
               onClick={closeMobileMenu}
             >
-              {link.label}
+              {link.icon} {link.label}
             </Link>
           ))}
         </nav>
