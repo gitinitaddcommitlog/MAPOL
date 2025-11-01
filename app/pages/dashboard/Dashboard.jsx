@@ -16,9 +16,9 @@ const Dashboard = () => {
   ];
 
   return (
-    <div style={{ 
+    <div className="dashboard-container" style={{ 
       minHeight: 'calc(100vh - 200px)',
-      padding: 'var(--mobile-padding)'
+      padding: '2rem 0'
     }}>
       <div className="container">
         {/* Welcome Section */}
@@ -26,21 +26,23 @@ const Dashboard = () => {
           marginBottom: '3rem',
           textAlign: 'center'
         }}>
-          <h1 className="responsive-heading" style={{
+          <h1 style={{
             background: 'var(--gradient-primary)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
             marginBottom: '1rem',
-            fontWeight: '700'
+            fontWeight: '700',
+            fontSize: '2.5rem'
           }}>
             MARPOL Compliance Dashboard
           </h1>
-          <p className="responsive-text" style={{
+          <p style={{
             color: '#64748b',
             maxWidth: '600px',
             margin: '0 auto',
-            lineHeight: '1.6'
+            lineHeight: '1.6',
+            fontSize: '1.125rem'
           }}>
             Monitor waste management compliance, track reports, and ensure environmental protection standards.
           </p>
@@ -49,27 +51,28 @@ const Dashboard = () => {
         {/* Stats Grid */}
         <section style={{ marginBottom: '3rem' }}>
           <h2 style={{
-            fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
+            fontSize: '1.5rem',
             marginBottom: '1.5rem',
             color: '#1e293b'
           }}>
             Overview
           </h2>
-          <div className="responsive-grid">
+          <div className="stats-grid" style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '1.5rem'
+          }}>
             {stats.map((stat, index) => (
               <div
                 key={index}
+                className="card"
                 style={{
-                  background: 'white',
-                  padding: '1.5rem',
-                  borderRadius: '12px',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                  border: '1px solid #e2e8f0',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  padding: '2rem 1.5rem'
                 }}
               >
                 <div style={{
-                  fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+                  fontSize: '2rem',
                   fontWeight: '700',
                   color: '#1e293b',
                   marginBottom: '0.5rem'
@@ -98,115 +101,52 @@ const Dashboard = () => {
         {/* Quick Actions */}
         <section>
           <h2 style={{
-            fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
+            fontSize: '1.5rem',
             marginBottom: '1.5rem',
             color: '#1e293b'
           }}>
             Quick Actions
           </h2>
-          <div className="responsive-grid">
+          <div className="actions-grid" style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1.5rem'
+          }}>
             {quickActions.map((action, index) => (
               <a
                 key={index}
                 href={action.link}
-                className="touch-button"
+                className="card"
                 style={{
-                  background: 'white',
-                  padding: '1.5rem',
-                  borderRadius: '12px',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                  border: '1px solid #e2e8f0',
                   textDecoration: 'none',
                   color: 'inherit',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: '0.75rem',
+                  gap: '1rem',
+                  padding: '2rem 1.5rem',
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.transform = 'translateY(-4px)';
-                  e.target.style.boxShadow = '0 8px 15px -3px rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = 'var(--shadow-xl)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
                 }}
               >
-                <span style={{ fontSize: '2rem' }}>{action.icon}</span>
+                <span style={{ fontSize: '2.5rem' }}>{action.icon}</span>
                 <span style={{
                   fontWeight: '600',
                   color: '#1e293b',
                   textAlign: 'center',
-                  fontSize: 'clamp(0.9rem, 2vw, 1rem)'
+                  fontSize: '1rem'
                 }}>
                   {action.label}
                 </span>
               </a>
             ))}
-          </div>
-        </section>
-
-        {/* Recent Activity - Mobile Optimized */}
-        <section style={{ marginTop: '3rem' }}>
-          <h2 style={{
-            fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
-            marginBottom: '1.5rem',
-            color: '#1e293b'
-          }}>
-            Recent Activity
-          </h2>
-          <div style={{
-            background: 'white',
-            borderRadius: '12px',
-            padding: '1.5rem',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-            overflowX: 'auto'
-          }}>
-            <div style={{
-              display: 'grid',
-              gap: '1rem',
-              minWidth: '300px'
-            }}>
-              {[
-                { action: 'Waste Form Submitted', time: '2 hours ago', status: 'Completed' },
-                { action: 'Compliance Check', time: '5 hours ago', status: 'Pending' },
-                { action: 'Report Generated', time: '1 day ago', status: 'Completed' }
-              ].map((activity, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '1rem',
-                    background: '#f8fafc',
-                    borderRadius: '8px',
-                    flexWrap: 'wrap',
-                    gap: '0.5rem'
-                  }}
-                >
-                  <div style={{ flex: '1 1 200px' }}>
-                    <div style={{ fontWeight: '600', color: '#1e293b' }}>
-                      {activity.action}
-                    </div>
-                    <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
-                      {activity.time}
-                    </div>
-                  </div>
-                  <div style={{
-                    padding: '0.25rem 0.75rem',
-                    borderRadius: '20px',
-                    fontSize: '0.75rem',
-                    fontWeight: '600',
-                    background: activity.status === 'Completed' ? '#dcfce7' : '#fef3c7',
-                    color: activity.status === 'Completed' ? '#166534' : '#92400e'
-                  }}>
-                    {activity.status}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
       </div>
