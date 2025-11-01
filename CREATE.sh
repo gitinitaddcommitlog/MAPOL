@@ -1,15 +1,17 @@
 #!/bin/bash
-# deploy_simple_version.sh
+# deploy_enhanced_version.sh
 
-echo "=== DEPLOYING SIMPLE VERSION TO GITHUB PAGES ==="
+echo "=== DEPLOYING ENHANCED VERSION ==="
 
-echo "STEP 1: Update docs folder"
+echo "STEP 1: Prepare docs folder with your full app structure"
 rm -rf docs/
 mkdir -p docs
 cp index.html docs/
+cp -r app/ docs/app/
+cp -r public/ docs/public/
 
 echo ""
-echo "STEP 2: Add GitHub Pages config"
+echo "STEP 2: Add GitHub Pages configuration"
 touch docs/.nojekyll
 
 cat > docs/404.html << 'EOF'
@@ -31,15 +33,13 @@ EOF
 echo ""
 echo "STEP 3: Commit and push"
 git add .
-git commit -m "deploy: Simple working version
-- Pure HTML/CSS/JS - no frameworks
-- Working navigation and forms
-- Animated 3D-style logo
-- Professional maritime design
-- Immediate loading, no dependencies"
+git commit -m "feat: Enhanced single entry point with component bridge
+- Preserves existing React app structure
+- Component bridge for loading actual components
+- Working navigation and pages
+- Ready for gradual component migration"
 git push origin main
 
 echo ""
-echo "✅ SIMPLE VERSION DEPLOYED!"
+echo "✅ ENHANCED VERSION DEPLOYED!"
 echo "🌐 Live at: https://gitinitaddcommitlog.github.io/MAPOL/"
-echo "⏰ Wait 2-5 minutes for deployment"
