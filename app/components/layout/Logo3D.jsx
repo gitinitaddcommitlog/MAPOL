@@ -51,7 +51,7 @@ function Logo3D() {
         <pointLight position={[-10, -10, -10]} intensity={0.5} />
         
         <Suspense fallback={<ModelFallback />}>
-          <ENAModel modelPath="/ena-logo.glb" />
+          <ENAModel modelPath="./ena-logo.glb" />
         </Suspense>
         
         <Environment preset="city" />

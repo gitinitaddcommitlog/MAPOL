@@ -1,62 +1,34 @@
 #!/bin/bash
-# complete-deployment-fix.sh
+# fix-logo-path.sh
 
-echo "🚀 COMPLETE DEPLOYMENT FIX"
+echo "🔧 FIXING LOGO PATH IN COMPONENT"
 
-# 1. Copy the 3D logo
-echo "📁 Copying 3D logo..."
-cp "/home/donkali/Documents/FIBERSPINES/LAB/3DVIEWER/BLENDER-FILES/ENA.glb" "public/ena-logo.glb"
+# Update the path in Logo3D.jsx from absolute to relative
+echo "📝 Updating Logo3D.jsx path..."
+sed -i 's|modelPath="/ena-logo.glb"|modelPath="./ena-logo.glb"|g' app/components/layout/Logo3D.jsx
 
-# 2. Make sure vite.config.js is correct
-cat > vite.config.js << 'EOF'
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+# Verify the change
+echo "🔍 Verifying the change:"
+grep -A 2 -B 2 "modelPath" app/components/layout/Logo3D.jsx
 
-export default defineConfig({
-  plugins: [react()],
-  root: resolve(__dirname, 'app'),
-  publicDir: resolve(__dirname, 'public'),
-  server: {
-    port: 3000,
-    open: true
-  },
-  resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx']
-  },
-  base: './',
-  build: {
-    outDir: resolve(__dirname, 'docs'),
-    assetsDir: 'assets',
-    emptyOutDir: true
-  }
-})
-EOF
-
-# 3. Clean and rebuild
-echo "🔨 Rebuilding application..."
+# Rebuild with the correct path
+echo "🚀 Rebuilding..."
 rm -rf docs/
 npm run build
 
-# 4. Verify the build has the logo
-echo "🔍 Verifying build..."
-if [ -f "docs/assets/ena-logo.glb" ] || [ -f "docs/ena-logo.glb" ]; then
-    echo "✅ 3D logo is in build"
-else
-    echo "❌ 3D logo missing from build - checking where it went..."
-    find docs/ -name "*.glb"
-fi
+# Verify the GLB is still there
+echo "🔍 Checking build:"
+find docs/ -name "*.glb"
 
-# 5. Force push all changes to GitHub
-echo "📦 Pushing to GitHub..."
+# Deploy the fix
+echo "📦 Deploying fix..."
 git add .
-git status
-git commit -m "FIX: Complete deployment with 3D logo asset"
+git commit -m "FIX: Use relative path for 3D logo"
 git push origin main
 
 echo ""
-echo "✅ DEPLOYMENT PUSHED!"
-echo "🌐 Check in 2-5 minutes: https://gitinitaddcommitlog.github.io/MAPOL/"
+echo "✅ DEPLOYED!"
+echo "🌐 Check: https://gitinitaddcommitlog.github.io/MAPOL/"
 echo ""
-echo "💡 If the page still closes, check browser console for new errors"
-echo "   The 404 for ena-logo.glb should now be fixed"
+echo "💡 The logo should now load from: ./ena-logo.glb (same directory)"
+echo "   Instead of: /ena-logo.glb (root domain)"
