@@ -410,3 +410,23 @@ header {
         padding: 0.5rem 0 !important;
     }
 }
+
+/* ===== HIDE 3D LOADER TEXT ===== */
+/* Hide any loading text from Three.js/React Three Fiber */
+canvas + div,
+[class*="loading"],
+[class*="Loading"],
+[data-loaded="false"] {
+  display: none !important;
+}
+
+/* Ensure the logo container only shows the 3D model */
+.header-logo-container > *:not(canvas) {
+  display: none !important;
+}
+
+.header-logo-container canvas {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}

@@ -1,24 +1,19 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useGLTF, useAnimations } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 
 const Logo3D = () => {
   const group = useRef();
-  const { scene, animations } = useGLTF('/logo.glb');
-  const { actions } = useAnimations(animations, group);
-
+  
+  // Load model without showing loader
+  const { scene } = useGLTF('/logo.glb');
+  
+  // Auto-rotate
   useFrame((state, delta) => {
     if (group.current) {
-      group.current.rotation.y += delta * 0.5; // Continuous rotation
+      group.current.rotation.y += delta * 0.5;
     }
   });
-
-  useEffect(() => {
-    // Start any animations if available
-    if (actions && Object.keys(actions).length > 0) {
-      actions[Object.keys(actions)[0]]?.play();
-    }
-  }, [actions]);
 
   return (
     <group ref={group}>
