@@ -1,391 +1,1227 @@
 #!/bin/bash
-# FIX-NAVIGATION.sh - Fix Buttons and Hamburger Menu
+# BEAUTIFY-FORMS.sh - Create Professional Forms Design
 
-echo "🔧 FIXING QUICK ACTIONS AND HAMBURGER MENU"
+echo "🎨 CREATING BEAUTIFUL PROFESSIONAL FORMS"
 
-# 1. First, let's update the Dashboard with functional quick actions
-cat > app/pages/dashboard/Dashboard.jsx << 'EOF'
-import React from 'react';
+# 1. First, let's add enhanced form styling to the CSS
+cat >> app/styles/globals.css << 'EOF'
+
+/* ===== ENHANCED FORM STYLES ===== */
+.form-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.form-progress {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light);
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.progress-steps::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--border-color);
+  z-index: 1;
+}
+
+.progress-step {
+  text-align: center;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.progress-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  font-weight: 700;
+  font-size: 16px;
+  border: 3px solid var(--border-color);
+  background: white;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.progress-circle.active {
+  background: var(--gradient-primary);
+  border-color: var(--primary-color);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(26, 54, 93, 0.3);
+}
+
+.progress-circle.completed {
+  background: var(--success-color);
+  border-color: var(--success-color);
+  color: white;
+}
+
+.progress-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.progress-label.active {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+/* Enhanced Form Sections */
+.form-section {
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.form-section:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+.section-header {
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--border-light);
+  position: relative;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: var(--gradient-accent);
+  border-radius: 3px;
+}
+
+/* Enhanced Form Grid */
+.enhanced-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Professional Form Groups */
+.enhanced-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.enhanced-form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.enhanced-form-group label.required::after {
+  content: "*";
+  color: var(--error-color);
+  margin-left: 0.25rem;
+}
+
+.enhanced-form-group input,
+.enhanced-form-group select,
+.enhanced-form-group textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: var(--surface-color);
+  font-family: var(--font-body);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.enhanced-form-group input:focus,
+.enhanced-form-group select:focus,
+.enhanced-form-group textarea:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 4px rgba(0, 168, 204, 0.1);
+  background: var(--surface-elevated);
+  transform: translateY(-1px);
+}
+
+.enhanced-form-group input:hover,
+.enhanced-form-group select:hover,
+.enhanced-form-group textarea:hover {
+  border-color: var(--primary-light);
+}
+
+/* Radio and Checkbox Groups */
+.radio-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.radio-option:hover {
+  border-color: var(--secondary-color);
+  background: #f8fdff;
+}
+
+.radio-option input[type="radio"] {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.radio-option.selected {
+  border-color: var(--secondary-color);
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  box-shadow: 0 4px 12px rgba(0, 168, 204, 0.15);
+}
+
+/* Enhanced Tables */
+.enhanced-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: white;
+}
+
+.enhanced-table th {
+  background: var(--gradient-primary);
+  color: white;
+  font-weight: 600;
+  padding: 1.25rem;
+  text-align: left;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.enhanced-table td {
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--border-light);
+  background: white;
+  transition: background 0.2s ease;
+}
+
+.enhanced-table tr:hover td {
+  background: #f8fafc;
+}
+
+.enhanced-table tr:last-child td {
+  border-bottom: none;
+}
+
+.enhanced-table input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.enhanced-table input:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(0, 168, 204, 0.1);
+}
+
+/* Form Navigation */
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--border-light);
+}
+
+.nav-btn {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.nav-btn-prev {
+  background: white;
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+}
+
+.nav-btn-prev:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateX(-2px);
+}
+
+.nav-btn-next {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 4px 14px rgba(26, 54, 93, 0.2);
+}
+
+.nav-btn-next:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(26, 54, 93, 0.3);
+}
+
+.nav-btn-submit {
+  background: linear-gradient(135deg, var(--success-color), #059669);
+  color: white;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.nav-btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+/* Warning and Info Messages */
+.form-warning {
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #f59e0b;
+  border-left: 4px solid var(--warning-color);
+  color: #92400e;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-info {
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  border: 1px solid var(--secondary-color);
+  border-left: 4px solid var(--secondary-color);
+  color: var(--primary-color);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Responsive Forms */
+@media (max-width: 768px) {
+  .form-section {
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .enhanced-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .progress-steps {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .progress-step {
+    flex: 0 0 calc(50% - 0.5rem);
+  }
+  
+  .nav-btn {
+    padding: 0.875rem 1.5rem;
+    min-width: 120px;
+    font-size: 0.9rem;
+  }
+  
+  .enhanced-table {
+    font-size: 0.8rem;
+  }
+  
+  .enhanced-table th,
+  .enhanced-table td {
+    padding: 0.75rem;
+  }
+}
+
+/* Custom Checkbox and Radio */
+.enhanced-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  margin-bottom: 0.5rem;
+}
+
+.enhanced-checkbox:hover {
+  border-color: var(--secondary-color);
+  background: #f8fdff;
+}
+
+.enhanced-checkbox.checked {
+  border-color: var(--secondary-color);
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  box-shadow: 0 4px 12px rgba(0, 168, 204, 0.15);
+}
+
+.enhanced-checkbox input[type="checkbox"] {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+}
+EOF
+
+# 2. Now create a beautifully styled forms page
+cat > app/pages/forms/MainForm.jsx << 'EOF'
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { generateMARPOLPDF } from '../../services/pdf/pdfGenerator';
+import { wasteApi } from '../../services/api/wasteApi';
 
-const Dashboard = () => {
+const MainForm = () => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  
+  const [formData, setFormData] = useState({
+    // Ship Particulars
+    shipName: '',
+    imoNumber: '',
+    grossTonnage: '',
+    ownerOperator: '',
+    distinctiveNumber: '',
+    flagState: '',
+    shipType: '',
+    otherShipType: '',
+    
+    // Port & Voyage
+    locationTerminal: '',
+    arrivalDateTime: '',
+    departureDateTime: '',
+    lastPortCountry: '',
+    nextPortCountry: '',
+    lastWasteDischargePort: '',
+    lastDischargeDate: '',
+    nextDischargePort: '',
+    submittingPerson: '',
+    
+    // Waste Discharge
+    deliverAllWaste: false,
+    wasteAnnexI: {},
+    wasteAnnexII: {},
+    wasteAnnexIV: {},
+    wasteAnnexV: {},
+    wasteAnnexVI: {},
+    
+    // Waste Retained
+    retainedAnnexI: {},
+    retainedAnnexII: {},
+    retainedAnnexIV: {},
+    retainedAnnexV: {},
+    
+    // Remarks & Signatures
+    remarks: '',
+    captainSignature: '',
+    captainAgreed: false,
+    agentSignature: '',
+    emaSignature: ''
+  });
 
-  const stats = [
-    { label: 'Total Forms Today', value: '12', color: '#10b981' },
-    { label: 'Pending Approvals', value: '3', color: '#f59e0b' },
-    { label: 'Completed Reports', value: '45', color: '#3b82f6' },
-    { label: 'Vessels Served', value: '8', color: '#8b5cf6' }
+  const steps = [
+    { number: 1, title: 'Ship Details', icon: '🚢' },
+    { number: 2, title: 'Port & Voyage', icon: '🌊' },
+    { number: 3, title: 'Waste Discharge', icon: '🗑️' },
+    { number: 4, title: 'Waste Retained', icon: '📦' },
+    { number: 5, title: 'Review & Sign', icon: '📝' }
   ];
 
-  const recentActivities = [
-    { vessel: 'MV Atlantic Star', action: 'Waste Form Submitted', time: '2 hours ago', status: 'completed' },
-    { vessel: 'MV Ocean Queen', action: 'Oil Waste Declaration', time: '4 hours ago', status: 'pending' },
-    { vessel: 'MV Sea Explorer', action: 'Plastic Waste Form', time: '1 day ago', status: 'completed' }
-  ];
+  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 5));
+  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
 
-  const handleQuickAction = (action) => {
-    switch(action) {
-      case 'form':
-        navigate('/form');
-        break;
-      case 'reports':
-        navigate('/reports');
-        break;
-      case 'settings':
-        alert('Settings feature coming soon!');
-        break;
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleNestedChange = (section, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [field]: value
+      }
+    }));
+  };
+
+  const handleSubmit = async () => {
+    if (!formData.captainSignature || !formData.emaSignature) {
+      alert('Please provide required signatures before submitting.');
+      return;
+    }
+    
+    if (!formData.captainAgreed) {
+      alert('Please certify that the information is accurate and complete.');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      generateMARPOLPDF(formData);
+      const result = await wasteApi.submitForm(formData);
+      
+      console.log('Form submitted to backend:', result);
+      alert('MARPOL Form Submitted Successfully! Data saved to database and PDF generated.');
+      
+      // Reset form and redirect to dashboard
+      setFormData({
+        shipName: '', imoNumber: '', grossTonnage: '', ownerOperator: '', 
+        distinctiveNumber: '', flagState: '', shipType: '', otherShipType: '',
+        locationTerminal: '', arrivalDateTime: '', departureDateTime: '', 
+        lastPortCountry: '', nextPortCountry: '', lastWasteDischargePort: '',
+        lastDischargeDate: '', nextDischargePort: '', submittingPerson: '',
+        deliverAllWaste: false, wasteAnnexI: {}, wasteAnnexII: {}, 
+        wasteAnnexIV: {}, wasteAnnexV: {}, wasteAnnexVI: {},
+        retainedAnnexI: {}, retainedAnnexII: {}, retainedAnnexIV: {}, retainedAnnexV: {},
+        remarks: '', captainSignature: '', captainAgreed: false, agentSignature: '', emaSignature: ''
+      });
+      setCurrentStep(1);
+      navigate('/');
+      
+    } catch (error) {
+      console.error('Form submission failed:', error);
+      alert('Failed to submit form to database. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const renderStepContent = () => {
+    switch(currentStep) {
+      case 1:
+        return <ShipParticularsForm formData={formData} onChange={handleInputChange} />;
+      case 2:
+        return <PortVoyageForm formData={formData} onChange={handleInputChange} />;
+      case 3:
+        return <WasteDischargeForm formData={formData} onChange={handleInputChange} onNestedChange={handleNestedChange} />;
+      case 4:
+        return <WasteRetainedForm formData={formData} onChange={handleInputChange} onNestedChange={handleNestedChange} />;
+      case 5:
+        return <RemarksSignatureForm formData={formData} onChange={handleInputChange} onSubmit={handleSubmit} isSubmitting={isSubmitting} />;
       default:
-        break;
+        return <div>Invalid step</div>;
     }
   };
 
   return (
-    <div className="container">
-      <div style={{ marginBottom: '2rem' }}>
-        <h1>Dashboard Overview</h1>
-        <p>Welcome to ENA Waste Management MARPOL Compliance System</p>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="stats-grid">
-        {stats.map((stat, index) => (
-          <div key={index} className="stat-card" style={{ borderLeftColor: stat.color }}>
-            <div className="stat-value" style={{ color: stat.color }}>
-              {stat.value}
+    <div className="container form-container">
+      {/* Progress Bar */}
+      <div className="form-progress">
+        <h1 style={{ color: 'var(--primary-color)', marginBottom: '2rem', textAlign: 'center' }}>
+          MARPOL Waste Declaration Form
+        </h1>
+        
+        <div className="progress-steps">
+          {steps.map(step => (
+            <div key={step.number} className="progress-step">
+              <div className={`progress-circle ${currentStep >= step.number ? (currentStep === step.number ? 'active' : 'completed') : ''}`}>
+                {currentStep > step.number ? '✓' : step.icon}
+              </div>
+              <div className={`progress-label ${currentStep === step.number ? 'active' : ''}`}>
+                {step.title}
+              </div>
             </div>
-            <div className="stat-label">{stat.label}</div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-        gap: '2rem'
-      }}>
-        {/* Quick Actions - NOW FUNCTIONAL */}
-        <div className="card">
-          <h2 style={{ marginBottom: '1.5rem' }}>Quick Actions</h2>
-          <div className="quick-actions">
-            <button 
-              className="btn-primary" 
-              style={{ justifyContent: 'center' }}
-              onClick={() => handleQuickAction('form')}
-            >
-              📝 Create New Waste Form
-            </button>
-            <button 
-              className="btn-secondary"
-              onClick={() => handleQuickAction('reports')}
-            >
-              📊 Generate Report
-            </button>
-            <button 
-              className="btn-accent"
-              onClick={() => handleQuickAction('settings')}
-            >
-              ⚙️ System Settings
-            </button>
-          </div>
+          ))}
         </div>
 
-        {/* Recent Activity */}
-        <div className="card">
-          <h2 style={{ marginBottom: '1.5rem' }}>Recent Activity</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {recentActivities.map((activity, index) => (
-              <div key={index} className="activity-item">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                  <div>
-                    <strong>{activity.vessel}</strong>
-                    <p style={{ margin: '0.25rem 0', color: '#64748b' }}>{activity.action}</p>
-                    <small style={{ color: '#94a3b8' }}>{activity.time}</small>
-                  </div>
-                  <span className={`status-badge status-${activity.status}`}>
-                    {activity.status}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>
+          Step {currentStep} of {steps.length} - {steps[currentStep - 1]?.title}
+        </div>
+      </div>
+
+      {/* Current Form Section */}
+      <div className="form-section">
+        {renderStepContent()}
+      </div>
+
+      {/* Navigation Buttons */}
+      <div className="form-navigation">
+        <button 
+          onClick={prevStep}
+          disabled={currentStep === 1 || isSubmitting}
+          className="nav-btn nav-btn-prev"
+        >
+          ← Previous
+        </button>
+        
+        <div style={{ flex: 1 }}></div>
+        
+        {currentStep < steps.length ? (
+          <button onClick={nextStep} className="nav-btn nav-btn-next" disabled={isSubmitting}>
+            Next →
+          </button>
+        ) : (
+          <button 
+            onClick={handleSubmit} 
+            className="nav-btn nav-btn-submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>⏳ Submitting...</>
+            ) : (
+              <>✅ Submit Form</>
+            )}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Ship Particulars Form Component - Enhanced
+const ShipParticularsForm = ({ formData, onChange }) => {
+  const shipTypes = [
+    'Oil Tanker',
+    'Commercial Tanker', 
+    'Bulk Tanker',
+    'Container',
+    'Other cargo ship',
+    'Passenger ship',
+    'Ro-Ro',
+    'Other (specify)'
+  ];
+
+  return (
+    <div>
+      <div className="section-header">
+        <h2>🚢 I. SHIP PARTICULARS</h2>
+        <p style={{ color: 'var(--text-secondary)', margin: '0.5rem 0 0 0', fontSize: '1rem' }}>
+          Complete all ship identification details
+        </p>
+      </div>
+      
+      <div className="enhanced-form-grid">
+        <div className="enhanced-form-group">
+          <label className="required">Name of Ship</label>
+          <input
+            type="text"
+            value={formData.shipName}
+            onChange={(e) => onChange('shipName', e.target.value)}
+            placeholder="Enter ship name"
+            required
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label className="required">IMO Number</label>
+          <input
+            type="text"
+            value={formData.imoNumber}
+            onChange={(e) => onChange('imoNumber', e.target.value)}
+            placeholder="Enter IMO number"
+            required
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label className="required">Gross Tonnage</label>
+          <input
+            type="number"
+            value={formData.grossTonnage}
+            onChange={(e) => onChange('grossTonnage', e.target.value)}
+            placeholder="Enter gross tonnage"
+            required
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label className="required">Owner or Operator</label>
+          <input
+            type="text"
+            value={formData.ownerOperator}
+            onChange={(e) => onChange('ownerOperator', e.target.value)}
+            placeholder="Enter owner/operator name"
+            required
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label>Distinctive Number or Letter</label>
+          <input
+            type="text"
+            value={formData.distinctiveNumber}
+            onChange={(e) => onChange('distinctiveNumber', e.target.value)}
+            placeholder="Enter distinctive number/letter"
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label className="required">Flag State</label>
+          <input
+            type="text"
+            value={formData.flagState}
+            onChange={(e) => onChange('flagState', e.target.value)}
+            placeholder="Enter flag state"
+            required
+          />
+        </div>
+      </div>
+
+      <div className="enhanced-form-group">
+        <label className="required">Type of Ship</label>
+        <div className="radio-group">
+          {shipTypes.map(type => (
+            <label 
+              key={type} 
+              className={`radio-option ${formData.shipType === type ? 'selected' : ''}`}
+            >
+              <input
+                type="radio"
+                name="shipType"
+                value={type}
+                checked={formData.shipType === type}
+                onChange={(e) => onChange('shipType', e.target.value)}
+                required
+              />
+              {type}
+            </label>
+          ))}
+        </div>
+        {formData.shipType === 'Other (specify)' && (
+          <input
+            type="text"
+            placeholder="Please specify ship type"
+            value={formData.otherShipType || ''}
+            onChange={(e) => onChange('otherShipType', e.target.value)}
+            className="enhanced-form-group"
+            style={{ marginTop: '1rem' }}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Port & Voyage Form Component - Enhanced
+const PortVoyageForm = ({ formData, onChange }) => {
+  return (
+    <div>
+      <div className="section-header">
+        <h2>🌊 II. PORT AND VOYAGE PARTICULARS</h2>
+        <p style={{ color: 'var(--text-secondary)', margin: '0.5rem 0 0 0', fontSize: '1rem' }}>
+          Enter port arrival, departure, and voyage details
+        </p>
+      </div>
+      
+      <div className="enhanced-form-grid">
+        <div className="enhanced-form-group">
+          <label className="required">Location/Terminal Name and POC</label>
+          <input
+            type="text"
+            value={formData.locationTerminal}
+            onChange={(e) => onChange('locationTerminal', e.target.value)}
+            placeholder="Enter location/terminal and point of contact"
+            required
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label className="required">Arrival Date and Time</label>
+          <input
+            type="datetime-local"
+            value={formData.arrivalDateTime}
+            onChange={(e) => onChange('arrivalDateTime', e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label className="required">Departure Date and Time</label>
+          <input
+            type="datetime-local"
+            value={formData.departureDateTime}
+            onChange={(e) => onChange('departureDateTime', e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label className="required">Last Port and Country</label>
+          <input
+            type="text"
+            value={formData.lastPortCountry}
+            onChange={(e) => onChange('lastPortCountry', e.target.value)}
+            placeholder="Enter last port and country"
+            required
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label>Next Port and Country</label>
+          <input
+            type="text"
+            value={formData.nextPortCountry}
+            onChange={(e) => onChange('nextPortCountry', e.target.value)}
+            placeholder="Enter next port and country (if known)"
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label>Last Port where waste was discharged</label>
+          <input
+            type="text"
+            value={formData.lastWasteDischargePort}
+            onChange={(e) => onChange('lastWasteDischargePort', e.target.value)}
+            placeholder="Enter last waste discharge port"
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label>Date of Last Discharge</label>
+          <input
+            type="date"
+            value={formData.lastDischargeDate}
+            onChange={(e) => onChange('lastDischargeDate', e.target.value)}
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label>Next Port of discharge</label>
+          <input
+            type="text"
+            value={formData.nextDischargePort}
+            onChange={(e) => onChange('nextDischargePort', e.target.value)}
+            placeholder="Enter next discharge port (if known)"
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label>Person submitting this form (if other than Master)</label>
+          <input
+            type="text"
+            value={formData.submittingPerson}
+            onChange={(e) => onChange('submittingPerson', e.target.value)}
+            placeholder="Enter name if not Master"
+          />
         </div>
       </div>
     </div>
   );
 };
 
-export default Dashboard;
-EOF
-
-# 2. Fix the hamburger menu to be a side panel with bold content
-cat >> app/styles/globals.css << 'EOF'
-
-/* ===== FIXED HAMBURGER SIDE PANEL ===== */
-.mobile-nav {
-  display: none;
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 280px;
-  height: 100%;
-  background: var(--gradient-primary);
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 0;
-  z-index: 1000;
-  transform: translateX(100%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
-  padding: 80px 0 0 0;
-}
-
-.mobile-nav.open {
-  transform: translateX(0);
-}
-
-/* Mobile menu header */
-.mobile-nav-header {
-  width: 100%;
-  padding: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  margin-bottom: 1rem;
-}
-
-.mobile-nav-title {
-  color: white;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin: 0;
-}
-
-.mobile-nav-subtitle {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.9rem;
-  margin: 0.25rem 0 0 0;
-}
-
-/* Mobile menu links - BOLD AND PROMINENT */
-.mobile-nav a {
-  color: white;
-  text-decoration: none;
-  font-size: 1.1rem;
-  font-weight: 700;
-  padding: 1.2rem 1.5rem;
-  transition: all 0.3s ease;
-  text-align: left;
-  width: 100%;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.mobile-nav a:last-child {
-  border-bottom: none;
-}
-
-.mobile-nav a:hover,
-.mobile-nav a.active {
-  background: rgba(255, 255, 255, 0.15);
-  padding-left: 2rem;
-}
-
-.mobile-nav a::before {
-  content: "▸";
-  font-size: 0.9rem;
-  opacity: 0.7;
-}
-
-.mobile-nav a.active::before {
-  content: "▶";
-  opacity: 1;
-}
-
-/* Mobile close button - top right */
-.mobile-nav-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 8px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1001;
-}
-
-.mobile-nav-close:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Overlay when mobile menu is open */
-.mobile-nav-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-}
-
-.mobile-nav-overlay.open {
-  display: block;
-}
-EOF
-
-# 3. Update the Header component with the new side panel design
-cat > app/components/layout/Header.jsx << 'EOF'
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import Logo3D from './Logo3D.jsx';
-
-const Header = () => {
-  const location = useLocation();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const isActive = (path) => {
-    return location.hash === `#${path}` || (path === '/' && location.hash === '');
+// Waste Discharge Form Component - Enhanced
+const WasteDischargeForm = ({ formData, onChange, onNestedChange }) => {
+  const wasteTypes = {
+    annexI: [
+      { id: 'oilyBilgeWater', label: 'Oily Bilge Water' },
+      { id: 'oilyResidues', label: 'Oily Residues (Sludge)' },
+      { id: 'oilyTankWashing', label: 'Oily Tank Washing' },
+      { id: 'dirtyBallastWater', label: 'Dirty Ballast Water' },
+      { id: 'scaleSludge', label: 'Scale and Sludge from Tank Cleaning' },
+      { id: 'otherAnnexI', label: 'Other (please specify)' }
+    ],
+    annexII: [
+      { id: 'categoryX', label: 'Category X Substance', requiresName: true },
+      { id: 'categoryY', label: 'Category Y Substance', requiresName: true },
+      { id: 'categoryZ', label: 'Category Z Substance', requiresName: true },
+      { id: 'osSubstances', label: 'OS - Other Substances', requiresName: true }
+    ],
+    annexIV: [
+      { id: 'sewage', label: 'Sewage' }
+    ],
+    annexV: [
+      { id: 'plastics', label: 'A. Plastics' },
+      { id: 'foodWaste', label: 'B. Food Waste' },
+      { id: 'domesticWaste', label: 'C. Domestic Waste' },
+      { id: 'cookingOil', label: 'D. Cooking Oil' },
+      { id: 'incineratorAsh', label: 'E. Incinerator Ash' },
+      { id: 'operationalWaste', label: 'F. Operational Wastes' },
+      { id: 'cargoResidues', label: 'G. Cargo Residues' },
+      { id: 'animalCarcasses', label: 'H. Animal Carcass(es)' },
+      { id: 'eWaste', label: 'I. E-Waste' }
+    ],
+    annexVI: [
+      { id: 'ozoneDepleting', label: 'Ozone-depleting Substances' },
+      { id: 'exhaustResidues', label: 'Exhaust Gas Cleaning Residues' }
+    ]
   };
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+  const handleWasteChange = (annex, wasteId, quantity, substanceName = '') => {
+    const currentData = formData[`waste${annex}`] || {};
+    onNestedChange(`waste${annex}`, wasteId, { quantity, substanceName });
   };
 
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
-
-  // Close mobile menu when route changes
-  useEffect(() => {
-    closeMobileMenu();
-  }, [location]);
-
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isMobileMenuOpen]);
-
-  const navLinks = [
-    { path: '/', label: 'Dashboard', icon: '📊' },
-    { path: '/form', label: 'Waste Forms', icon: '📝' },
-    { path: '/reports', label: 'Reports', icon: '📈' }
-  ];
+  const renderWasteTable = (annex, wastes, title) => (
+    <div style={{ marginBottom: '2rem' }}>
+      <h4 style={{ color: 'var(--secondary-color)', marginBottom: '1.5rem', paddingBottom: '0.5rem', borderBottom: '2px solid var(--border-light)' }}>
+        {title}
+      </h4>
+      <table className="enhanced-table">
+        <thead>
+          <tr>
+            <th>Waste Type</th>
+            <th>Quantity (m³/MT)</th>
+            {wastes.some(w => w.requiresName) && <th>Substance Name</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {wastes.map(waste => {
+            const wasteData = formData[`waste${annex}`]?.[waste.id] || {};
+            return (
+              <tr key={waste.id}>
+                <td style={{ fontWeight: '500' }}>{waste.label}</td>
+                <td>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    value={wasteData.quantity || ''}
+                    onChange={(e) => handleWasteChange(annex, waste.id, e.target.value, wasteData.substanceName)}
+                  />
+                </td>
+                {waste.requiresName && (
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="Enter substance name"
+                      value={wasteData.substanceName || ''}
+                      onChange={(e) => handleWasteChange(annex, waste.id, wasteData.quantity, e.target.value)}
+                    />
+                  </td>
+                )}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
 
   return (
-    <header>
-      <div className="header-container">
-        {/* Logo */}
-        <div className="header-logo-container">
-          <Logo3D />
-        </div>
-        
-        {/* Brand */}
-        <div className="header-brand">
-          <Link to="/" style={{ textDecoration: 'none' }}>
-            <h1 className="header-title">ENA Waste Management</h1>
-            <p className="header-subtitle">MARPOL Compliance System</p>
-          </Link>
-        </div>
-        
-        {/* Desktop Navigation */}
-        <nav className="desktop-nav">
-          {navLinks.map(link => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={isActive(link.path) ? 'active' : ''}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Mobile Navigation Toggle */}
-        <button 
-          className="mobile-nav-toggle"
-          onClick={toggleMobileMenu}
-          aria-label="Toggle mobile menu"
-        >
-          ☰
-        </button>
-
-        {/* Mobile Navigation Overlay */}
-        <div 
-          className={`mobile-nav-overlay ${isMobileMenuOpen ? 'open' : ''}`}
-          onClick={closeMobileMenu}
-        ></div>
-
-        {/* Mobile Navigation Menu - SIDE PANEL */}
-        <nav className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
-          <button 
-            className="mobile-nav-close"
-            onClick={closeMobileMenu}
-            aria-label="Close mobile menu"
-          >
-            ✕
-          </button>
-          
-          {/* Mobile Menu Header */}
-          <div className="mobile-nav-header">
-            <div className="mobile-nav-title">ENA Waste Management</div>
-            <div className="mobile-nav-subtitle">MARPOL Compliance</div>
-          </div>
-          
-          {/* Mobile Menu Links - BOLD CONTENT */}
-          {navLinks.map(link => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={isActive(link.path) ? 'active' : ''}
-              onClick={closeMobileMenu}
-            >
-              {link.icon} {link.label}
-            </Link>
-          ))}
-        </nav>
+    <div>
+      <div className="section-header">
+        <h2>🗑️ III. TYPE AND AMOUNT OF WASTE FOR DISCHARGE</h2>
+        <p style={{ color: 'var(--text-secondary)', margin: '0.5rem 0 0 0', fontSize: '1rem' }}>
+          Specify waste types and quantities for discharge
+        </p>
       </div>
-    </header>
+      
+      <div style={{ marginBottom: '2rem' }}>
+        <label className={`enhanced-checkbox ${formData.deliverAllWaste ? 'checked' : ''}`}>
+          <input
+            type="checkbox"
+            checked={formData.deliverAllWaste}
+            onChange={(e) => onChange('deliverAllWaste', e.target.checked)}
+          />
+          <strong>I confirm that I am delivering all the waste held on board this vessel at this port.</strong>
+        </label>
+      </div>
+
+      {renderWasteTable('AnnexI', wasteTypes.annexI, 'MARPOL Annex I - Oil')}
+      {renderWasteTable('AnnexII', wasteTypes.annexII, 'MARPOL Annex II - NLS')}
+      {renderWasteTable('AnnexIV', wasteTypes.annexIV, 'MARPOL Annex IV - Sewage')}
+      {renderWasteTable('AnnexV', wasteTypes.annexV, 'MARPOL Annex V - Garbage')}
+      {renderWasteTable('AnnexVI', wasteTypes.annexVI, 'MARPOL Annex VI - Air Pollution')}
+
+      <div className="form-warning">
+        <strong>⚠️ IMPORTANT:</strong> ZERO WASTE WILL NOT BE RESPONSIBLE FOR ANY UNDISCLOSED HAZARDOUS WASTE
+      </div>
+    </div>
   );
 };
 
-export default Header;
+// Waste Retained Form Component - Enhanced
+const WasteRetainedForm = ({ formData, onChange, onNestedChange }) => {
+  const wasteTypes = {
+    annexI: [
+      { id: 'oilyBilgeWater', label: 'Oily Bilge Water' },
+      { id: 'oilyResidues', label: 'Oily Residues (Sludge)' },
+      { id: 'oilyTankWashing', label: 'Oily Tank Washing' },
+      { id: 'dirtyBallastWater', label: 'Dirty Ballast Water' },
+      { id: 'scaleSludge', label: 'Scale and Sludge from Tank Cleaning' },
+      { id: 'otherAnnexI', label: 'Other (please specify)' }
+    ],
+    annexII: [
+      { id: 'categoryX', label: 'Category X Substance' },
+      { id: 'categoryY', label: 'Category Y Substance' },
+      { id: 'categoryZ', label: 'Category Z Substance' },
+      { id: 'osSubstances', label: 'OS - Other Substances' }
+    ],
+    annexIV: [
+      { id: 'sewage', label: 'Sewage' }
+    ],
+    annexV: [
+      { id: 'plastics', label: 'A. Plastic' },
+      { id: 'foodWaste', label: 'B. Food Waste' },
+      { id: 'domesticWaste', label: 'C. Domestic Waste' },
+      { id: 'cookingOil', label: 'D. Cooking Oil' },
+      { id: 'incineratorAsh', label: 'E. Incinerator Ash' },
+      { id: 'operationalWaste', label: 'F. Operational Waste' },
+      { id: 'cargoResidues', label: 'G. Cargo Residues' },
+      { id: 'animalCarcasses', label: 'H. Animal Carcass(es)' },
+      { id: 'eWaste', label: 'I. E-Waste' }
+    ]
+  };
+
+  const handleRetainedChange = (annex, wasteId, field, value) => {
+    const currentData = formData[`retained${annex}`] || {};
+    const wasteData = currentData[wasteId] || {};
+    
+    onNestedChange(`retained${annex}`, wasteId, {
+      ...wasteData,
+      [field]: value
+    });
+  };
+
+  const renderRetainedTable = (annex, wastes, title) => (
+    <div style={{ marginBottom: '2rem' }}>
+      <h4 style={{ color: 'var(--secondary-color)', marginBottom: '1.5rem', paddingBottom: '0.5rem', borderBottom: '2px solid var(--border-light)' }}>
+        {title}
+      </h4>
+      <table className="enhanced-table">
+        <thead>
+          <tr>
+            <th>Waste Type</th>
+            <th>Max Storage Capacity (m³)</th>
+            <th>Amount Retained (m³)</th>
+            <th>Next Delivery Port</th>
+            <th>Volume Before Next Port (m³)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {wastes.map(waste => {
+            const wasteData = formData[`retained${annex}`]?.[waste.id] || {};
+            return (
+              <tr key={waste.id}>
+                <td style={{ fontWeight: '500' }}>{waste.label}</td>
+                <td>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    value={wasteData.maxCapacity || ''}
+                    onChange={(e) => handleRetainedChange(annex, waste.id, 'maxCapacity', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    value={wasteData.amountRetained || ''}
+                    onChange={(e) => handleRetainedChange(annex, waste.id, 'amountRetained', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    placeholder="Port name"
+                    value={wasteData.nextDeliveryPort || ''}
+                    onChange={(e) => handleRetainedChange(annex, waste.id, 'nextDeliveryPort', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    value={wasteData.volumeBeforeNextPort || ''}
+                    onChange={(e) => handleRetainedChange(annex, waste.id, 'volumeBeforeNextPort', e.target.value)}
+                  />
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  return (
+    <div>
+      <div className="section-header">
+        <h2>📦 IV. WASTE RETAINED ON BOARD</h2>
+        <p style={{ color: 'var(--text-secondary)', margin: '0.5rem 0 0 0', fontSize: '1rem' }}>
+          Complete this section if NOT delivering all waste at this port
+        </p>
+      </div>
+
+      {renderRetainedTable('AnnexI', wasteTypes.annexI, 'MARPOL Annex I - Oil')}
+      {renderRetainedTable('AnnexII', wasteTypes.annexII, 'MARPOL Annex II - NLS')}
+      {renderRetainedTable('AnnexIV', wasteTypes.annexIV, 'MARPOL Annex IV - Sewage')}
+      {renderRetainedTable('AnnexV', wasteTypes.annexV, 'MARPOL Annex V - Garbage')}
+    </div>
+  );
+};
+
+// Remarks & Signature Form Component - Enhanced
+const RemarksSignatureForm = ({ formData, onChange, onSubmit, isSubmitting }) => {
+  return (
+    <div>
+      <div className="section-header">
+        <h2>📝 V. REMARKS AND SIGNATURES</h2>
+        <p style={{ color: 'var(--text-secondary)', margin: '0.5rem 0 0 0', fontSize: '1rem' }}>
+          Final review and authorization
+        </p>
+      </div>
+      
+      <div className="enhanced-form-group">
+        <label>Remarks</label>
+        <textarea
+          rows="4"
+          value={formData.remarks}
+          onChange={(e) => onChange('remarks', e.target.value)}
+          placeholder="Enter any additional remarks or notes..."
+          style={{ 
+            width: '100%', 
+            resize: 'vertical',
+            padding: '1rem',
+            border: '2px solid var(--border-color)',
+            borderRadius: '12px',
+            fontSize: '1rem',
+            fontFamily: 'inherit'
+          }}
+        />
+      </div>
+
+      <div className="enhanced-form-grid" style={{ marginTop: '2rem' }}>
+        <div className="enhanced-form-group">
+          <label className="required">Chief Engineer / Captain Signature</label>
+          <input
+            type="text"
+            value={formData.captainSignature}
+            onChange={(e) => onChange('captainSignature', e.target.value)}
+            placeholder="Enter full name"
+            required
+            disabled={isSubmitting}
+          />
+          <div style={{ marginTop: '1rem' }}>
+            <label className={`enhanced-checkbox ${formData.captainAgreed ? 'checked' : ''}`}>
+              <input
+                type="checkbox"
+                checked={formData.captainAgreed}
+                onChange={(e) => onChange('captainAgreed', e.target.checked)}
+                required
+                disabled={isSubmitting}
+              />
+              <strong>I certify that the information provided is accurate and complete</strong>
+            </label>
+          </div>
+        </div>
+
+        <div className="enhanced-form-group">
+          <label>Agent Signature</label>
+          <input
+            type="text"
+            value={formData.agentSignature}
+            onChange={(e) => onChange('agentSignature', e.target.value)}
+            placeholder="Enter agent name"
+            disabled={isSubmitting}
+          />
+        </div>
+
+        <div className="enhanced-form-group">
+          <label className="required">ENA Waste Management Signature</label>
+          <input
+            type="text"
+            value={formData.emaSignature}
+            onChange={(e) => onChange('emaSignature', e.target.value)}
+            placeholder="Enter ENA representative name"
+            required
+            disabled={isSubmitting}
+          />
+        </div>
+      </div>
+
+      <div className="form-info">
+        <h4 style={{ color: 'var(--primary-color)', marginBottom: '0.5rem' }}>
+          📋 Form Completion
+        </h4>
+        <p style={{ color: 'var(--text-secondary)', margin: 0 }}>
+          {isSubmitting 
+            ? 'Submitting form to database and generating PDF...' 
+            : 'Review all entered information before submitting. Data will be saved to the database and a PDF will be generated.'}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default MainForm;
 EOF
 
-echo "✅ NAVIGATION FIXES APPLIED!"
+echo "✅ BEAUTIFUL FORMS CREATED!"
 echo ""
-echo "🎯 WHAT'S BEEN FIXED:"
-echo "====================="
-echo "✅ QUICK ACTIONS:"
-echo "   • 'Create New Waste Form' → Opens Forms page"
-echo "   • 'Generate Report' → Opens Reports page" 
-echo "   • 'System Settings' → Shows coming soon message"
-echo ""
-echo "✅ HAMBURGER MENU:"
-echo "   • Now opens as side panel from right"
-echo "   • Bold, prominent menu items"
-echo "   • Icons and indicators for active state"
-echo "   • Smooth animations and overlay"
-echo "   • Professional mobile experience"
+echo "🎯 ENHANCEMENTS ADDED:"
+echo "======================"
+echo "✅ Modern, clean design with professional styling"
+echo "✅ Enhanced progress bar with icons and animations"
+echo "✅ Beautiful form sections with hover effects"
+echo "✅ Professional input fields with focus states"
+echo "✅ Enhanced radio buttons and checkboxes"
+echo "✅ Beautiful tables with proper spacing"
+echo "✅ Professional navigation buttons"
+echo "✅ Responsive design for all devices"
+echo "✅ Better user experience and visual hierarchy"
 
-# 4. Build and deploy
+# 3. Build and deploy
 echo ""
 echo "🔨 Building application..."
 npm run build
@@ -393,19 +1229,19 @@ npm run build
 if [ $? -eq 0 ]; then
     echo "✅ Build successful!"
     echo ""
-    echo "🚀 Deploying navigation fixes..."
+    echo "🚀 Deploying beautiful forms..."
     git add .
-    git commit -m "FIX: Functional quick actions + side panel hamburger menu"
+    git commit -m "DESIGN: Beautiful professional forms with enhanced UX"
     git push origin main
     echo ""
-    echo "🎉 NAVIGATION FIXED!"
-    echo "🌐 Check: https://gitinitaddcommitlog.github.io/MAPOL/"
+    echo "🎉 BEAUTIFUL FORMS DEPLOYED!"
+    echo "🌐 Check: https://gitinitaddcommitlog.github.io/MAPOL/#/form"
     echo ""
-    echo "Test the quick actions and new mobile menu!"
+    echo "Your forms should now look professional and user-friendly!"
 else
     echo "❌ Build failed"
 fi
 EOF
 
-chmod +x FIX-NAVIGATION.sh
-./FIX-NAVIGATION.sh
+chmod +x BEAUTIFY-FORMS.sh
+./BEAUTIFY-FORMS.sh
