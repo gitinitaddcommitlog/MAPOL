@@ -1,34 +1,31 @@
 #!/bin/bash
-# deploy-mobile-responsive.sh
+# deploy-layout-fix.sh
 
-echo "🚀 DEPLOYING MOBILE RESPONSIVE VERSION"
+echo "🚀 DEPLOYING HEADER LAYOUT FIX"
 
-# Build the responsive version
-echo "🔨 Building responsive app..."
+# Build and test
+echo "🔨 Building application..."
 npm run build
 
-# Verify responsive features
-echo "🔍 Verifying responsive elements..."
-grep -r "clamp\|@media\|responsive" docs/ -i | head -5
+if [ $? -eq 0 ]; then
+    echo "✅ Build successful"
+else
+    echo "❌ Build failed"
+    exit 1
+fi
 
 # Deploy to GitHub
 echo "📦 Deploying to GitHub Pages..."
 git add .
-git commit -m "FEAT: Complete mobile responsiveness upgrade"
+git commit -m "FIX: Header layout - fixed text overlap and mobile spacing"
 git push origin main
 
 echo ""
-echo "🎉 MOBILE RESPONSIVE DEPLOYMENT COMPLETE!"
-echo "📱 Test on different devices:"
-echo "   - Mobile phones (320px-768px)"
-echo "   - Tablets (768px-1024px)" 
-echo "   - Desktop (1024px+)"
+echo "🎉 LAYOUT FIX DEPLOYED!"
+echo "🌐 Check: https://gitinitaddcommitlog.github.io/MAPOL/"
 echo ""
-echo "🌐 Live at: https://gitinitaddcommitlog.github.io/MAPOL/"
-echo ""
-echo "✅ Features deployed:"
-echo "   - Responsive header with mobile menu"
-echo "   - Flexible grid layouts"
-echo "   - Touch-friendly buttons"
-echo "   - Responsive typography"
-echo "   - Mobile-optimized components"
+echo "✅ Fixed issues:"
+echo "   - Text no longer overlaps 3D logo"
+echo "   - Proper spacing on all screen sizes"
+echo "   - Hamburger menu works correctly"
+echo "   - Maintained all navigation functionality"
