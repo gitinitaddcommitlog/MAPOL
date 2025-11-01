@@ -13,11 +13,12 @@ const Header = () => {
   return (
     <header style={{
       background: 'var(--gradient-primary)',
-      padding: '1rem 0',
+      padding: '0.75rem 0',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
       position: 'sticky',
       top: 0,
-      zIndex: 1000
+      zIndex: 1000,
+      backdropFilter: 'blur(10px)'
     }}>
       <div style={{
         maxWidth: '1200px',
@@ -25,44 +26,58 @@ const Header = () => {
         padding: '0 2rem',
         display: 'flex',
         alignItems: 'center',
-        gap: '1.5rem'
+        justifyContent: 'space-between',
+        gap: '1rem'
       }}>
-        {/* Logo */}
+        {/* Logo and Brand - Beautifully spaced */}
         <div style={{
-          width: '60px',
-          height: '60px',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0
+          gap: '0.75rem',
+          flex: 1,
+          minWidth: 0
         }}>
-          <Logo3D />
+          <div className="logo-container" style={{
+            width: '60px',
+            height: '60px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0
+          }}>
+            <Logo3D />
+          </div>
+          
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <h1 style={{
+              margin: 0,
+              fontSize: '1.75rem',
+              fontWeight: '700',
+              color: 'white',
+              lineHeight: '1.1',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}>
+              ENA Waste Management
+            </h1>
+            <p style={{
+              margin: '2px 0 0 0',
+              fontSize: '0.9rem',
+              color: 'rgba(255, 255, 255, 0.9)',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}>
+              MARPOL Compliance System
+            </p>
+          </div>
         </div>
         
-        {/* Brand */}
-        <div style={{ minWidth: 0, flex: 1 }}>
-          <h1 style={{
-            margin: 0,
-            fontSize: '1.75rem',
-            fontWeight: '700',
-            color: 'white',
-            lineHeight: '1.2'
-          }}>
-            ENA Waste Management
-          </h1>
-          <p style={{
-            margin: 0,
-            fontSize: '0.9rem',
-            color: 'rgba(255, 255, 255, 0.9)'
-          }}>
-            MARPOL Compliance System
-          </p>
-        </div>
-        
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation - Elegant spacing */}
         <nav className="desktop-nav" style={{
           display: 'flex',
-          gap: '2rem',
+          gap: '1.5rem',
           alignItems: 'center',
           marginLeft: 'auto'
         }}>
@@ -70,41 +85,38 @@ const Header = () => {
             <a
               key={item.name}
               href={item.path}
+              className="touch-target"
               style={{
                 color: 'white',
                 textDecoration: 'none',
-                fontWeight: '500',
-                padding: '0.5rem 1rem',
-                borderRadius: '6px',
+                fontWeight: '600',
+                padding: '0.6rem 1.2rem',
+                borderRadius: '8px',
                 transition: 'all 0.3s ease',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                background: 'transparent',
+                border: '1px solid transparent'
               }}
-              onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
-              onMouseLeave={(e) => e.target.style.background = 'transparent'}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(255, 255, 255, 0.15)';
+                e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'transparent';
+                e.target.style.borderColor = 'transparent';
+                e.target.style.transform = 'translateY(0)';
+              }}
             >
               {item.name}
             </a>
           ))}
         </nav>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Button - Beautiful design */}
         <button
           className="mobile-nav-button"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          style={{
-            background: 'rgba(255, 255, 255, 0.1)',
-            border: 'none',
-            borderRadius: '6px',
-            color: 'white',
-            padding: '0.5rem',
-            cursor: 'pointer',
-            display: 'none',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '40px',
-            height: '40px',
-            flexShrink: 0
-          }}
           aria-label="Toggle menu"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -115,7 +127,7 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Mobile Navigation Menu */}
+      {/* Mobile Navigation Menu - Beautiful dropdown */}
       <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`} style={{
         maxWidth: '1200px',
         margin: '0 auto',
@@ -123,10 +135,11 @@ const Header = () => {
       }}>
         <div style={{
           background: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '8px',
-          padding: '1rem',
-          backdropFilter: 'blur(10px)',
-          marginTop: '0.5rem'
+          borderRadius: '12px',
+          padding: '0.75rem',
+          backdropFilter: 'blur(15px)',
+          marginTop: '0.5rem',
+          border: '1px solid rgba(255, 255, 255, 0.2)'
         }}>
           <div style={{
             display: 'flex',
@@ -137,20 +150,8 @@ const Header = () => {
               <a
                 key={item.name}
                 href={item.path}
-                className="touch-target"
-                style={{
-                  color: 'white',
-                  textDecoration: 'none',
-                  fontWeight: '500',
-                  padding: '1rem',
-                  borderRadius: '6px',
-                  transition: 'all 0.3s ease',
-                  textAlign: 'center',
-                  background: 'transparent'
-                }}
+                className="mobile-menu-item touch-target"
                 onClick={() => setIsMobileMenuOpen(false)}
-                onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.2)'}
-                onMouseLeave={(e) => e.target.style.background = 'transparent'}
               >
                 {item.name}
               </a>

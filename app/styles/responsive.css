@@ -1,14 +1,73 @@
-/* 📱 CAREFUL RESPONSIVE DESIGN - iPhone 12 Pro Max & Tablets */
+/* 🎨 BEAUTIFUL RESPONSIVE DESIGN */
 
-/* iPhone 12 Pro Max: 428px x 926px */
+/* Mobile First Approach - iPhone 12 Pro Max: 428px and below */
 @media (max-width: 428px) {
-  /* Header adjustments for mobile */
+  /* Header - Compact and beautiful */
   header > div {
+    padding: 0 1rem !important;
+    gap: 0.75rem !important;
+  }
+  
+  /* Smaller logo for mobile */
+  .logo-container {
+    width: 45px !important;
+    height: 45px !important;
+  }
+  
+  /* Better typography for mobile */
+  header h1 {
+    font-size: 1.1rem !important;
+    line-height: 1.1 !important;
+  }
+  
+  header p {
+    font-size: 0.7rem !important;
+    margin-top: 2px !important;
+  }
+  
+  /* Hide desktop nav, show mobile button */
+  .desktop-nav {
+    display: none !important;
+  }
+  
+  .mobile-nav-button {
+    display: flex !important;
+  }
+  
+  /* Content spacing */
+  main {
     padding: 0 1rem !important;
   }
   
+  /* Footer mobile optimization */
+  footer > div {
+    padding: 0 1rem !important;
+  }
+  
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+  
+  footer {
+    padding: 2rem 0 1rem !important;
+  }
+}
+
+/* Tablets: 429px - 768px */
+@media (min-width: 429px) and (max-width: 768px) {
+  header > div {
+    padding: 0 1.5rem !important;
+    gap: 1rem !important;
+  }
+  
+  .logo-container {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  
   header h1 {
-    font-size: 1.25rem !important;
+    font-size: 1.3rem !important;
   }
   
   header p {
@@ -23,44 +82,6 @@
     display: flex !important;
   }
   
-  /* Main content padding */
-  main {
-    padding: 0 1rem !important;
-  }
-  
-  /* Footer adjustments */
-  footer > div {
-    padding: 0 1rem !important;
-  }
-  
-  footer .grid-layout {
-    grid-template-columns: 1fr !important;
-    gap: 2rem !important;
-  }
-}
-
-/* Tablets and larger phones: 429px - 768px */
-@media (min-width: 429px) and (max-width: 768px) {
-  header > div {
-    padding: 0 1.5rem !important;
-  }
-  
-  header h1 {
-    font-size: 1.5rem !important;
-  }
-  
-  header p {
-    font-size: 0.8rem !important;
-  }
-  
-  .desktop-nav {
-    display: none !important;
-  }
-  
-  .mobile-nav-button {
-    display: flex !important;
-  }
-  
   main {
     padding: 0 1.5rem !important;
   }
@@ -69,7 +90,7 @@
     padding: 0 1.5rem !important;
   }
   
-  footer .grid-layout {
+  .footer-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 2rem !important;
   }
@@ -88,68 +109,21 @@
   .desktop-nav {
     display: flex !important;
   }
+  
+  .logo-container {
+    width: 60px !important;
+    height: 60px !important;
+  }
 }
 
-/* Large desktop: 1024px and above */
-@media (min-width: 1024px) {
+/* Large tablets and small desktop: 769px - 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
   header > div {
-    padding: 0 2rem !important;
+    padding: 0 1.5rem !important;
   }
   
-  main {
-    padding: 0 2rem !important;
-  }
-  
-  footer > div {
-    padding: 0 2rem !important;
-  }
-}
-
-/* Safe mobile menu styles */
-.mobile-menu-button {
-  display: none;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: none !important;
-  border-radius: 6px !important;
-  color: white !important;
-  padding: 0.5rem !important;
-  cursor: pointer !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 40px !important;
-  height: 40px !important;
-  flex-shrink: 0 !important;
-}
-
-.mobile-menu {
-  display: none;
-  margin-top: 0.75rem;
-}
-
-.mobile-menu.open {
-  display: block;
-}
-
-/* Responsive grid for forms and content */
-@media (max-width: 768px) {
-  .responsive-grid {
-    grid-template-columns: 1fr !important;
-    gap: 1rem !important;
-  }
-  
-  .form-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-/* iPad Pro and larger tablets: 1024px - 1366px */
-@media (min-width: 769px) and (max-width: 1366px) {
   header h1 {
-    font-size: 1.5rem !important;
-  }
-  
-  header p {
-    font-size: 0.85rem !important;
+    font-size: 1.4rem !important;
   }
   
   .desktop-nav a {
@@ -158,17 +132,114 @@
   }
 }
 
-/* Touch-friendly targets for mobile */
+/* Large desktop: 1025px and above */
+@media (min-width: 1025px) {
+  header > div {
+    padding: 0 2rem !important;
+  }
+  
+  header h1 {
+    font-size: 1.75rem !important;
+  }
+}
+
+/* Beautiful mobile menu */
+.mobile-nav-button {
+  display: none;
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 8px !important;
+  color: white !important;
+  padding: 0.5rem !important;
+  cursor: pointer !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  flex-shrink: 0 !important;
+  transition: all 0.3s ease !important;
+}
+
+.mobile-nav-button:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  transform: scale(1.05) !important;
+}
+
+.mobile-menu {
+  display: none;
+  margin-top: 0.75rem;
+  animation: slideDown 0.3s ease;
+}
+
+.mobile-menu.open {
+  display: block;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile menu items */
+.mobile-menu-item {
+  color: white !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  padding: 1rem !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+  text-align: center !important;
+  background: transparent !important;
+  display: block !important;
+  margin-bottom: 0.25rem !important;
+  border: 1px solid transparent !important;
+}
+
+.mobile-menu-item:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  transform: translateX(5px) !important;
+}
+
+/* Smooth transitions for all elements */
+header, .desktop-nav a, .mobile-nav-button {
+  transition: all 0.3s ease;
+}
+
+/* Responsive content containers */
+@media (max-width: 768px) {
+  .content-container {
+    padding: 1rem !important;
+  }
+  
+  .responsive-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  .card {
+    padding: 1.25rem !important;
+    margin-bottom: 1rem !important;
+  }
+}
+
+/* Enhanced touch targets */
 @media (max-width: 768px) {
   .touch-target {
     min-height: 44px;
     min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   a, button {
     min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 }
