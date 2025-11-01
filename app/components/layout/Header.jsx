@@ -30,62 +30,55 @@ const Header = () => {
           justifyContent: 'space-between',
           gap: '1rem'
         }}>
-          {/* Logo and Brand - Fixed with proper spacing */}
+          {/* Logo at far left */}
           <div style={{
+            width: '45px',
+            height: '45px',
+            flexShrink: 0,
             display: 'flex',
             alignItems: 'center',
-            gap: '0.75rem',
-            flexShrink: 0,
-            minWidth: 0,
-            flex: 1
+            justifyContent: 'center'
           }}>
-            <div style={{
-              width: '50px',
-              height: '50px',
-              flexShrink: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <Logo3D />
-            </div>
-            <div style={{ 
-              minWidth: 0,
-              flex: 1,
-              overflow: 'hidden'
-            }}>
-              <h1 style={{
-                margin: 0,
-                fontSize: '1.25rem',
-                fontWeight: '700',
-                color: 'white',
-                lineHeight: '1.2',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}>
-                ENA Waste Management
-              </h1>
-              <p style={{
-                margin: 0,
-                fontSize: '0.75rem',
-                color: 'rgba(255, 255, 255, 0.9)',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}>
-                MARPOL Compliance System
-              </p>
-            </div>
+            <Logo3D />
           </div>
 
-          {/* Desktop Navigation - Properly spaced */}
-          <nav className="desktop-nav" style={{
+          {/* Brand text */}
+          <div style={{ 
+            minWidth: 0,
+            flex: 1,
+            overflow: 'hidden'
+          }}>
+            <h1 style={{
+              margin: 0,
+              fontSize: '1.25rem',
+              fontWeight: '700',
+              color: 'white',
+              lineHeight: '1.2',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}>
+              ENA Waste Management
+            </h1>
+            <p style={{
+              margin: 0,
+              fontSize: '0.75rem',
+              color: 'rgba(255, 255, 255, 0.9)',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}>
+              MARPOL Compliance System
+            </p>
+          </div>
+
+          {/* Desktop Navigation - visible by default */}
+          <nav style={{
             display: 'flex',
             gap: '1.5rem',
             alignItems: 'center',
             flexShrink: 0
-          }}>
+          }} className="desktop-nav">
             {navigationItems.map((item) => (
               <a
                 key={item.name}
@@ -112,9 +105,8 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Mobile Menu Button - Only shows on mobile */}
+          {/* Mobile Menu Button - hidden by default, shown via CSS */}
           <button
-            className="mobile-nav-button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             style={{
               background: 'rgba(255, 255, 255, 0.1)',
@@ -123,7 +115,7 @@ const Header = () => {
               color: 'white',
               padding: '0.5rem',
               cursor: 'pointer',
-              display: 'none',
+              display: 'none', // HIDDEN BY DEFAULT
               alignItems: 'center',
               justifyContent: 'center',
               width: '40px',
@@ -131,6 +123,7 @@ const Header = () => {
               flexShrink: 0
             }}
             aria-label="Toggle menu"
+            className="mobile-menu-button"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path d="M3 12H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -141,10 +134,10 @@ const Header = () => {
         </div>
 
         {/* Mobile Navigation Menu */}
-        <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`} style={{
-          display: 'none',
+        <div style={{
+          display: isMobileMenuOpen ? 'block' : 'none',
           marginTop: '0.75rem'
-        }}>
+        }} className="mobile-menu">
           <div style={{
             background: 'rgba(255, 255, 255, 0.1)',
             borderRadius: '8px',
@@ -169,7 +162,8 @@ const Header = () => {
                     transition: 'all 0.3s ease',
                     textAlign: 'center',
                     background: 'transparent',
-                    fontSize: '0.9rem'
+                    fontSize: '0.9rem',
+                    display: 'block'
                   }}
                   onClick={() => setIsMobileMenuOpen(false)}
                   onMouseEnter={(e) => {

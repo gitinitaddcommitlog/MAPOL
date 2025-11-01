@@ -20,10 +20,11 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/form" element={<MainForm />} />
             <Route path="/reports" element={<Reports />} />
+            {/* Catch-all route to prevent 404s on GitHub Pages */}
+            <Route path="*" element={<Dashboard />} />
           </Routes>
         </main>
         
-        {/* Enhanced Footer */}
         <footer style={{
           background: 'var(--gradient-primary)',
           color: 'white',
