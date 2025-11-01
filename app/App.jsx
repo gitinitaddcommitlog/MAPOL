@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/layout/Header.jsx';
 import Dashboard from './pages/dashboard/Dashboard.jsx';
 import MainForm from './pages/forms/MainForm.jsx';
@@ -20,6 +20,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/form" element={<MainForm />} />
             <Route path="/reports" element={<Reports />} />
+            {/* Catch-all route */}
             <Route path="*" element={<Dashboard />} />
           </Routes>
         </main>

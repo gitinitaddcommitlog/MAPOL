@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Logo3D from './Logo3D.jsx';
 
 const Header = () => {
@@ -19,10 +20,10 @@ const Header = () => {
         gap: '1rem',
         position: 'relative'
       }}>
-        {/* Logo - 20% WIDER SQUARE CONTAINER */}
+        {/* Logo */}
         <div className="header-logo-container" style={{
-          width: '120px', // 20% wider: 100px → 120px
-          height: '120px', // 20% taller: 100px → 120px
+          width: '120px',
+          height: '120px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -35,35 +36,37 @@ const Header = () => {
           <Logo3D />
         </div>
         
-        {/* Brand - Adjusted for wider logo */}
+        {/* Brand */}
         <div style={{
           flex: 1,
           minWidth: 0,
           marginLeft: '0.75rem'
         }}>
-          <h1 className="header-title" style={{
-            margin: 0,
-            fontSize: '1.75rem',
-            fontWeight: '700',
-            color: 'white',
-            lineHeight: '1.2',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}>
-            ENA Waste Management
-          </h1>
-          <p className="header-subtitle" style={{
-            margin: '2px 0 0 0',
-            fontSize: '0.9rem',
-            color: 'rgba(255, 255, 255, 0.9)',
-            lineHeight: '1.3',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}>
-            MARPOL Compliance System
-          </p>
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <h1 className="header-title" style={{
+              margin: 0,
+              fontSize: '1.75rem',
+              fontWeight: '700',
+              color: 'white',
+              lineHeight: '1.2',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}>
+              ENA Waste Management
+            </h1>
+            <p className="header-subtitle" style={{
+              margin: '2px 0 0 0',
+              fontSize: '0.9rem',
+              color: 'rgba(255, 255, 255, 0.9)',
+              lineHeight: '1.3',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}>
+              MARPOL Compliance System
+            </p>
+          </Link>
         </div>
         
         {/* Navigation */}
@@ -74,7 +77,7 @@ const Header = () => {
           marginLeft: 'auto',
           flexShrink: 0
         }}>
-          <a href="/" style={{
+          <Link to="/" style={{
             color: 'white',
             textDecoration: 'none',
             fontWeight: '500',
@@ -85,8 +88,8 @@ const Header = () => {
           }} onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
              onMouseLeave={(e) => e.target.style.background = 'transparent'}>
             Dashboard
-          </a>
-          <a href="/form" style={{
+          </Link>
+          <Link to="/#/form" style={{
             color: 'white',
             textDecoration: 'none',
             fontWeight: '500',
@@ -97,8 +100,8 @@ const Header = () => {
           }} onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
              onMouseLeave={(e) => e.target.style.background = 'transparent'}>
             Forms
-          </a>
-          <a href="/reports" style={{
+          </Link>
+          <Link to="/#/reports" style={{
             color: 'white',
             textDecoration: 'none',
             fontWeight: '500',
@@ -109,7 +112,7 @@ const Header = () => {
           }} onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
              onMouseLeave={(e) => e.target.style.background = 'transparent'}>
             Reports
-          </a>
+          </Link>
         </nav>
       </div>
     </header>
