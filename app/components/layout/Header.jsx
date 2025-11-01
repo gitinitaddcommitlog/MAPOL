@@ -61,25 +61,15 @@ const Header = () => {
   ];
 
   return (
-    <header style={{
-      background: 'var(--gradient-primary)',
-      padding: '1rem 0',
-      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-      position: 'relative',
-      zIndex: 100
-    }}>
+    <header>
       <div className="header-container">
-        {/* Logo */}
+        {/* Logo - Now properly contained */}
         <div className="header-logo-container">
           <Logo3D />
         </div>
         
         {/* Brand */}
-        <div style={{
-          flex: 1,
-          minWidth: 0,
-          marginLeft: '0.75rem'
-        }}>
+        <div className="header-brand">
           <Link 
             to="/" 
             style={{ textDecoration: 'none' }}
