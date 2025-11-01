@@ -1,8 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Logo3D from './Logo3D.jsx';
 
 const Header = () => {
+  const location = useLocation();
+  
   return (
     <header style={{
       background: 'var(--gradient-primary)',
@@ -57,7 +59,7 @@ const Header = () => {
           </Link>
         </div>
         
-        {/* Navigation - ALWAYS VISIBLE */}
+        {/* Navigation - PROPER HashRouter LINKS */}
         <nav style={{
           display: 'flex',
           gap: '1.5rem',
@@ -72,10 +74,19 @@ const Header = () => {
               fontWeight: '500',
               padding: '0.5rem 1rem',
               borderRadius: '6px',
-              transition: 'all 0.3s ease'
+              transition: 'all 0.3s ease',
+              background: location.hash === '#/' || location.hash === '' ? 'rgba(255, 255, 255, 0.2)' : 'transparent'
             }}
-            onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
-            onMouseLeave={(e) => e.target.style.background = 'transparent'}
+            onMouseEnter={(e) => {
+              if (!(location.hash === '#/' || location.hash === '')) {
+                e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!(location.hash === '#/' || location.hash === '')) {
+                e.target.style.background = 'transparent';
+              }
+            }}
           >
             Dashboard
           </Link>
@@ -87,10 +98,19 @@ const Header = () => {
               fontWeight: '500',
               padding: '0.5rem 1rem',
               borderRadius: '6px',
-              transition: 'all 0.3s ease'
+              transition: 'all 0.3s ease',
+              background: location.hash === '#/form' ? 'rgba(255, 255, 255, 0.2)' : 'transparent'
             }}
-            onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
-            onMouseLeave={(e) => e.target.style.background = 'transparent'}
+            onMouseEnter={(e) => {
+              if (location.hash !== '#/form') {
+                e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (location.hash !== '#/form') {
+                e.target.style.background = 'transparent';
+              }
+            }}
           >
             Forms
           </Link>
@@ -102,10 +122,19 @@ const Header = () => {
               fontWeight: '500',
               padding: '0.5rem 1rem',
               borderRadius: '6px',
-              transition: 'all 0.3s ease'
+              transition: 'all 0.3s ease',
+              background: location.hash === '#/reports' ? 'rgba(255, 255, 255, 0.2)' : 'transparent'
             }}
-            onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
-            onMouseLeave={(e) => e.target.style.background = 'transparent'}
+            onMouseEnter={(e) => {
+              if (location.hash !== '#/reports') {
+                e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (location.hash !== '#/reports') {
+                e.target.style.background = 'transparent';
+              }
+            }}
           >
             Reports
           </Link>

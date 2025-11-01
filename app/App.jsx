@@ -20,7 +20,6 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/form" element={<MainForm />} />
             <Route path="/reports" element={<Reports />} />
-            {/* Catch-all route */}
             <Route path="*" element={<Dashboard />} />
           </Routes>
         </main>
