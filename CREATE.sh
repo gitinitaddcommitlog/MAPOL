@@ -1,142 +1,12 @@
 #!/bin/bash
-# INCREASE-LOGO-SIZE.sh - Increase Logo Size by 50%
+# RESTORE-SIDE-PANEL.sh - Restore Hamburger Side Panel
 
-echo "📐 INCREASING 3D LOGO SIZE BY 50%"
+echo "🔧 RESTORING SIDE PANEL HAMBURGER MENU"
 
-# 1. Update the CSS to increase logo container size by 50%
-cat > app/styles/globals.css << 'EOF'
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+# 1. Update the CSS to restore the side panel
+cat >> app/styles/globals.css << 'EOF'
 
-:root {
-  --primary-color: #1a365d;
-  --primary-dark: #0f2040;
-  --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background: #f8fafc;
-  min-height: 100vh;
-}
-
-/* ===== FIXED HEADER - LARGER LOGO ===== */
-header {
-  background: var(--gradient-primary);
-  padding: 0.75rem 0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 100;
-  min-height: 100px; /* Increased to accommodate larger logo */
-  display: flex;
-  align-items: center;
-}
-
-.header-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  height: 100%;
-}
-
-/* ===== LARGER LOGO CONTAINER - INCREASED BY 50% ===== */
-.header-logo-container {
-  width: 90px;  /* Increased from 60px to 90px (50% larger) */
-  height: 90px; /* Increased from 60px to 90px (50% larger) */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin: 0;
-  padding: 6px; /* Slightly increased padding */
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px; /* Slightly larger border radius */
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Ensure logo content stays within bounds */
-.header-logo-container > div {
-  width: 100% !important;
-  height: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border-radius: 10px !important; /* Slightly larger */
-  margin: 0 !important;
-  padding: 0 !important;
-  font-size: 16px !important; /* Larger text for bigger logo */
-  font-weight: bold !important;
-}
-
-/* ===== BRAND TEXT - ADJUSTED FOR LARGER LOGO ===== */
-.header-brand {
-  flex: 1;
-  min-width: 0;
-  margin-left: 0.75rem; /* Slightly more margin for larger logo */
-}
-
-.header-title {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: white;
-  line-height: 1.2;
-}
-
-.header-subtitle {
-  margin: 2px 0 0 0;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.3;
-}
-
-/* ===== DESKTOP NAVIGATION ===== */
-.desktop-nav {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.desktop-nav a {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  transition: background 0.3s ease;
-}
-
-.desktop-nav a:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.desktop-nav a.active {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* ===== MOBILE NAVIGATION ===== */
-.mobile-nav-toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  margin-left: auto;
-}
-
+/* ===== SIDE PANEL HAMBURGER MENU ===== */
 .mobile-nav {
   display: none;
   position: fixed;
@@ -257,519 +127,145 @@ header {
 .mobile-nav-overlay.open {
   display: block;
 }
-
-/* ===== RESPONSIVE DESIGN ===== */
-@media (max-width: 1024px) {
-  .header-container {
-    padding: 0 1.5rem;
-  }
-  
-  .header-logo-container {
-    width: 80px; /* Increased from 55px */
-    height: 80px; /* Increased from 55px */
-  }
-  
-  .header-title {
-    font-size: 1.3rem;
-  }
-}
-
-@media (max-width: 768px) {
-  header {
-    padding: 0.5rem 0;
-    min-height: 90px; /* Increased for mobile */
-  }
-  
-  .header-container {
-    padding: 0 1rem;
-    gap: 0.5rem;
-  }
-  
-  .header-logo-container {
-    width: 75px; /* Increased from 50px */
-    height: 75px; /* Increased from 50px */
-    padding: 5px;
-  }
-  
-  .header-brand {
-    margin-left: 0.5rem;
-  }
-  
-  .header-title {
-    font-size: 1.1rem;
-  }
-  
-  .header-subtitle {
-    font-size: 0.7rem;
-  }
-  
-  /* Hide desktop nav on mobile */
-  .desktop-nav {
-    display: none;
-  }
-  
-  /* Show mobile toggle */
-  .mobile-nav-toggle {
-    display: block;
-  }
-}
-
-@media (min-width: 769px) {
-  .mobile-nav {
-    display: none !important;
-  }
-}
-
-/* ===== MAIN CONTENT ===== */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.card {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* ===== ENHANCED FORM STYLES ===== */
-.form-container {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.form-progress {
-  background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-light);
-}
-
-.progress-steps {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  margin-bottom: 2rem;
-}
-
-.progress-steps::before {
-  content: '';
-  position: absolute;
-  top: 20px;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--border-color);
-  z-index: 1;
-}
-
-.progress-step {
-  text-align: center;
-  flex: 1;
-  position: relative;
-  z-index: 2;
-}
-
-.progress-circle {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 12px;
-  font-weight: 700;
-  font-size: 16px;
-  border: 3px solid var(--border-color);
-  background: white;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.progress-circle.active {
-  background: var(--gradient-primary);
-  border-color: var(--primary-color);
-  color: white;
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(26, 54, 93, 0.3);
-}
-
-.progress-circle.completed {
-  background: var(--success-color);
-  border-color: var(--success-color);
-  color: white;
-}
-
-.progress-label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  transition: all 0.3s ease;
-}
-
-.progress-label.active {
-  color: var(--primary-color);
-  font-weight: 700;
-}
-
-/* Enhanced Form Sections */
-.form-section {
-  background: white;
-  border-radius: 16px;
-  padding: 2.5rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-light);
-  transition: all 0.3s ease;
-}
-
-.form-section:hover {
-  box-shadow: var(--shadow-xl);
-}
-
-.section-header {
-  color: var(--primary-color);
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 3px solid var(--border-light);
-  position: relative;
-}
-
-.section-header::after {
-  content: '';
-  position: absolute;
-  bottom: -3px;
-  left: 0;
-  width: 80px;
-  height: 3px;
-  background: var(--gradient-accent);
-  border-radius: 3px;
-}
-
-/* Enhanced Form Grid */
-.enhanced-form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-/* Professional Form Groups */
-.enhanced-form-group {
-  margin-bottom: 1.5rem;
-}
-
-.enhanced-form-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  color: var(--text-primary);
-  font-size: 0.95rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.enhanced-form-group label.required::after {
-  content: "*";
-  color: var(--error-color);
-  margin-left: 0.25rem;
-}
-
-.enhanced-form-group input,
-.enhanced-form-group select,
-.enhanced-form-group textarea {
-  width: 100%;
-  padding: 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  background: var(--surface-color);
-  font-family: var(--font-body);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.enhanced-form-group input:focus,
-.enhanced-form-group select:focus,
-.enhanced-form-group textarea:focus {
-  outline: none;
-  border-color: var(--secondary-color);
-  box-shadow: 0 0 0 4px rgba(0, 168, 204, 0.1);
-  background: var(--surface-elevated);
-  transform: translateY(-1px);
-}
-
-.enhanced-form-group input:hover,
-.enhanced-form-group select:hover,
-.enhanced-form-group textarea:hover {
-  border-color: var(--primary-light);
-}
-
-/* Radio and Checkbox Groups */
-.radio-group {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.radio-option {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background: white;
-}
-
-.radio-option:hover {
-  border-color: var(--secondary-color);
-  background: #f8fdff;
-}
-
-.radio-option input[type="radio"] {
-  margin: 0;
-  width: 18px;
-  height: 18px;
-}
-
-.radio-option.selected {
-  border-color: var(--secondary-color);
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-  box-shadow: 0 4px 12px rgba(0, 168, 204, 0.15);
-}
-
-/* Enhanced Tables */
-.enhanced-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin: 1.5rem 0;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  background: white;
-}
-
-.enhanced-table th {
-  background: var(--gradient-primary);
-  color: white;
-  font-weight: 600;
-  padding: 1.25rem;
-  text-align: left;
-  font-size: 0.9rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.enhanced-table td {
-  padding: 1.25rem;
-  border-bottom: 1px solid var(--border-light);
-  background: white;
-  transition: background 0.2s ease;
-}
-
-.enhanced-table tr:hover td {
-  background: #f8fafc;
-}
-
-.enhanced-table tr:last-child td {
-  border-bottom: none;
-}
-
-.enhanced-table input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-}
-
-.enhanced-table input:focus {
-  outline: none;
-  border-color: var(--secondary-color);
-  box-shadow: 0 0 0 3px rgba(0, 168, 204, 0.1);
-}
-
-/* Form Navigation */
-.form-navigation {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 2px solid var(--border-light);
-}
-
-.nav-btn {
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-width: 140px;
-  justify-content: center;
-}
-
-.nav-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none !important;
-}
-
-.nav-btn-prev {
-  background: white;
-  color: var(--text-primary);
-  border: 2px solid var(--border-color);
-}
-
-.nav-btn-prev:hover:not(:disabled) {
-  background: #f8fafc;
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-  transform: translateX(-2px);
-}
-
-.nav-btn-next {
-  background: var(--gradient-primary);
-  color: white;
-  box-shadow: 0 4px 14px rgba(26, 54, 93, 0.2);
-}
-
-.nav-btn-next:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(26, 54, 93, 0.3);
-}
-
-.nav-btn-submit {
-  background: linear-gradient(135deg, var(--success-color), #059669);
-  color: white;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
-}
-
-.nav-btn-submit:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
-}
-
-/* Warning and Info Messages */
-.form-warning {
-  background: linear-gradient(135deg, #fffbeb, #fef3c7);
-  border: 1px solid #f59e0b;
-  border-left: 4px solid var(--warning-color);
-  color: #92400e;
-  padding: 1.5rem;
-  border-radius: 12px;
-  margin: 1.5rem 0;
-  box-shadow: var(--shadow-sm);
-}
-
-.form-info {
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-  border: 1px solid var(--secondary-color);
-  border-left: 4px solid var(--secondary-color);
-  color: var(--primary-color);
-  padding: 1.5rem;
-  border-radius: 12px;
-  margin: 1.5rem 0;
-  box-shadow: var(--shadow-sm);
-}
-
-/* Responsive Forms */
-@media (max-width: 768px) {
-  .form-section {
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .enhanced-form-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .progress-steps {
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  
-  .progress-step {
-    flex: 0 0 calc(50% - 0.5rem);
-  }
-  
-  .nav-btn {
-    padding: 0.875rem 1.5rem;
-    min-width: 120px;
-    font-size: 0.9rem;
-  }
-  
-  .enhanced-table {
-    font-size: 0.8rem;
-  }
-  
-  .enhanced-table th,
-  .enhanced-table td {
-    padding: 0.75rem;
-  }
-}
-
-/* Custom Checkbox and Radio */
-.enhanced-checkbox {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background: white;
-  margin-bottom: 0.5rem;
-}
-
-.enhanced-checkbox:hover {
-  border-color: var(--secondary-color);
-  background: #f8fdff;
-}
-
-.enhanced-checkbox.checked {
-  border-color: var(--secondary-color);
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-  box-shadow: 0 4px 12px rgba(0, 168, 204, 0.15);
-}
-
-.enhanced-checkbox input[type="checkbox"] {
-  margin: 0;
-  width: 18px;
-  height: 18px;
-}
 EOF
 
-echo "✅ LOGO SIZE INCREASED BY 50%!"
-echo ""
-echo "🎯 SIZE CHANGES:"
-echo "================"
-echo "• Desktop: 90px × 90px (was 60px × 60px)"
-echo "• Tablet: 80px × 80px (was 55px × 55px)"
-echo "• Mobile: 75px × 75px (was 50px × 50px)"
-echo ""
-echo "• Header height increased to accommodate larger logo"
-echo "• Logo text size increased for better visibility"
-echo "• All responsive breakpoints updated"
+# 2. Update the Header component to use the side panel
+cat > app/components/layout/Header.jsx << 'EOF'
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import Logo3D from './Logo3D.jsx';
 
-# 2. Build and deploy
+const Header = () => {
+  const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const isActive = (path) => {
+    return location.hash === `#${path}` || (path === '/' && location.hash === '');
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    closeMobileMenu();
+  }, [location]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
+  const navLinks = [
+    { path: '/', label: 'Dashboard', icon: '📊' },
+    { path: '/form', label: 'Waste Forms', icon: '📝' },
+    { path: '/reports', label: 'Reports', icon: '📈' }
+  ];
+
+  return (
+    <header>
+      <div className="header-container">
+        {/* Logo */}
+        <div className="header-logo-container">
+          <Logo3D />
+        </div>
+        
+        {/* Brand */}
+        <div className="header-brand">
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <h1 className="header-title">ENA Waste Management</h1>
+            <p className="header-subtitle">MARPOL Compliance System</p>
+          </Link>
+        </div>
+        
+        {/* Desktop Navigation */}
+        <nav className="desktop-nav">
+          {navLinks.map(link => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={isActive(link.path) ? 'active' : ''}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Mobile Navigation Toggle */}
+        <button 
+          className="mobile-nav-toggle"
+          onClick={toggleMobileMenu}
+          aria-label="Toggle mobile menu"
+        >
+          ☰
+        </button>
+
+        {/* Mobile Navigation Overlay */}
+        <div 
+          className={`mobile-nav-overlay ${isMobileMenuOpen ? 'open' : ''}`}
+          onClick={closeMobileMenu}
+        ></div>
+
+        {/* Mobile Navigation Menu - SIDE PANEL */}
+        <nav className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
+          <button 
+            className="mobile-nav-close"
+            onClick={closeMobileMenu}
+            aria-label="Close mobile menu"
+          >
+            ✕
+          </button>
+          
+          {/* Mobile Menu Header */}
+          <div className="mobile-nav-header">
+            <div className="mobile-nav-title">ENA Waste Management</div>
+            <div className="mobile-nav-subtitle">MARPOL Compliance</div>
+          </div>
+          
+          {/* Mobile Menu Links - BOLD CONTENT */}
+          {navLinks.map(link => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={isActive(link.path) ? 'active' : ''}
+              onClick={closeMobileMenu}
+            >
+              {link.icon} {link.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
+EOF
+
+echo "✅ SIDE PANEL HAMBURGER MENU RESTORED!"
+echo ""
+echo "🎯 FEATURES RESTORED:"
+echo "===================="
+echo "✅ Side panel slides in from right (280px wide)"
+echo "✅ Bold menu items with icons"
+echo "✅ Overlay background when open"
+echo "✅ Close button in top right"
+echo "✅ Body scroll lock when open"
+echo "✅ Auto-close on navigation"
+
+# 3. Build and deploy
 echo ""
 echo "🔨 Building application..."
 npm run build
@@ -777,19 +273,19 @@ npm run build
 if [ $? -eq 0 ]; then
     echo "✅ Build successful!"
     echo ""
-    echo "🚀 Deploying larger logo..."
+    echo "🚀 Deploying side panel fix..."
     git add .
-    git commit -m "STYLE: Increase 3D logo size by 50% - better visibility"
+    git commit -m "FIX: Restore side panel hamburger menu"
     git push origin main
     echo ""
-    echo "🎉 LARGER LOGO DEPLOYED!"
+    echo "🎉 SIDE PANEL RESTORED!"
     echo "🌐 Check: https://gitinitaddcommitlog.github.io/MAPOL/"
     echo ""
-    echo "The 3D logo should now be 50% larger while staying properly contained!"
+    echo "The hamburger menu should now open as a side panel on mobile!"
 else
     echo "❌ Build failed"
 fi
 EOF
 
-chmod +x INCREASE-LOGO-SIZE.sh
-./INCREASE-LOGO-SIZE.sh
+chmod +x RESTORE-SIDE-PANEL.sh
+./RESTORE-SIDE-PANEL.sh
