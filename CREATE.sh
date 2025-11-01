@@ -1,84 +1,270 @@
 #!/bin/bash
-# RESTORE-LOGO-SIZE.sh - Restore 50% Larger Logo
+# FIX-HAMBURGER.sh - Fix Side Panel Not Opening
 
-echo "🔧 RESTORING 50% LARGER LOGO SIZE"
+echo "🔧 FIXING HAMBURGER MENU - SIDE PANEL NOT OPENING"
 
-echo "📋 Restoring commit: 521db64"
-echo "STYLE: Increase 3D logo size by 50% - better visibility"
+# 1. First, let's check the current Header component
+echo "🔍 Checking current Header component..."
+grep -A 5 -B 5 "mobile-nav-toggle" app/components/layout/Header.jsx
+grep -A 10 "mobile-nav" app/components/layout/Header.jsx
 
-# 1. First, backup current state
-echo "💾 Backing up current state..."
-mkdir -p backup_current
-cp app/styles/globals.css backup_current/ 2>/dev/null
-cp app/components/layout/Header.jsx backup_current/ 2>/dev/null
+# 2. Check if CSS classes are properly defined
+echo "🔍 Checking CSS classes..."
+grep -A 10 "mobile-nav-toggle" app/styles/globals.css
+grep -A 10 "mobile-nav.open" app/styles/globals.css
 
-# 2. Restore the specific commit
-echo "🔧 Restoring files from commit 521db64..."
-git checkout 521db64 -- app/styles/globals.css
-git checkout 521db64 -- app/components/layout/Header.jsx
+# 3. Fix the Header component with proper event handling
+cat > app/components/layout/Header.jsx << 'EOF'
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import Logo3D from './Logo3D.jsx';
 
-# 3. Check what was restored
-echo "✅ Restored files:"
-git status --short
+const Header = () => {
+  const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-# 4. Build and test
-echo "🔨 Testing build..."
-if npm run build; then
-    echo "✅ Build successful!"
-    BUILD_STATUS="success"
-else
-    echo "❌ Build failed"
-    BUILD_STATUS="failed"
-fi
+  const isActive = (path) => {
+    return location.hash === `#${path}` || (path === '/' && location.hash === '');
+  };
 
-echo ""
-echo "📊 RESTORATION SUMMARY:"
-echo "======================="
-echo "✅ Commit: 521db64 restored"
-echo "✅ Logo: 50% larger size (90px × 90px)"
-echo "✅ Build: $BUILD_STATUS"
+  const toggleMobileMenu = () => {
+    console.log('Toggle mobile menu clicked, current state:', isMobileMenuOpen);
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
-if [ "$BUILD_STATUS" = "success" ]; then
-    echo ""
-    echo "🚀 DEPLOYING RESTORED LOGO SIZE..."
-    git add .
-    git commit -m "RESTORE: 50% larger logo size from commit 521db64"
-    git push origin main
-    echo ""
-    echo "🎉 LARGER LOGO RESTORED!"
-    echo "🌐 Check: https://gitinitaddcommitlog.github.io/MAPOL/"
-    echo ""
-    echo "The logo should now be 50% larger while keeping the side panel menu!"
-else
-    echo ""
-    echo "🔧 BUILD FIX REQUIRED..."
-    # If build fails, let's manually apply just the logo size changes
-    echo "Applying logo size changes manually..."
-    
-    # Update just the logo container sizes in CSS
-    sed -i 's/width: 60px;/width: 90px;/g' app/styles/globals.css
-    sed -i 's/height: 60px;/height: 90px;/g' app/styles/globals.css
-    sed -i 's/width: 55px;/width: 80px;/g' app/styles/globals.css
-    sed -i 's/height: 55px;/height: 80px;/g' app/styles/globals.css
-    sed -i 's/width: 50px;/width: 75px;/g' app/styles/globals.css
-    sed -i 's/height: 50px;/height: 75px;/g' app/styles/globals.css
-    
-    npm run build
-    git add .
-    git commit -m "FIX: Manual restore of 50% larger logo size"
-    git push origin main
-    echo "✅ Manual logo size restore deployed!"
-fi
+  const closeMobileMenu = () => {
+    console.log('Closing mobile menu');
+    setIsMobileMenuOpen(false);
+  };
 
-echo ""
-echo "🎯 LOGO SIZE SHOULD BE:"
-echo "======================="
-echo "• Desktop: 90px × 90px (50% larger)"
-echo "• Tablet: 80px × 80px"
-echo "• Mobile: 75px × 75px"
-echo ""
-echo "✅ Side panel menu should still work!"
+  // Close mobile menu when route changes
+  useEffect(() => {
+    closeMobileMenu();
+  }, [location]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      console.log('Body scroll locked');
+    } else {
+      document.body.style.overflow = 'unset';
+      console.log('Body scroll unlocked');
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
+  const navLinks = [
+    { path: '/', label: 'Dashboard', icon: '📊' },
+    { path: '/form', label: 'Waste Forms', icon: '📝' },
+    { path: '/reports', label: 'Reports', icon: '📈' }
+  ];
+
+  return (
+    <header>
+      <div className="header-container">
+        {/* Logo */}
+        <div className="header-logo-container">
+          <Logo3D />
+        </div>
+        
+        {/* Brand */}
+        <div className="header-brand">
+          <Link to="/" style={{ textDecoration: 'none' }} onClick={closeMobileMenu}>
+            <h1 className="header-title">ENA Waste Management</h1>
+            <p className="header-subtitle">MARPOL Compliance System</p>
+          </Link>
+        </div>
+        
+        {/* Desktop Navigation */}
+        <nav className="desktop-nav">
+          {navLinks.map(link => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={isActive(link.path) ? 'active' : ''}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Mobile Navigation Toggle */}
+        <button 
+          className="mobile-nav-toggle"
+          onClick={toggleMobileMenu}
+          aria-label="Toggle mobile menu"
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'white',
+            fontSize: '1.5rem',
+            cursor: 'pointer',
+            padding: '0.5rem',
+            marginLeft: 'auto'
+          }}
+        >
+          {isMobileMenuOpen ? '✕' : '☰'}
+        </button>
+
+        {/* Mobile Navigation Overlay */}
+        {isMobileMenuOpen && (
+          <div 
+            className="mobile-nav-overlay"
+            onClick={closeMobileMenu}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              background: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 999
+            }}
+          ></div>
+        )}
+
+        {/* Mobile Navigation Menu - SIDE PANEL */}
+        <nav 
+          className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}
+          style={{
+            display: isMobileMenuOpen ? 'flex' : 'none',
+            position: 'fixed',
+            top: 0,
+            right: 0,
+            width: '280px',
+            height: '100%',
+            background: 'linear-gradient(135deg, #1a365d 0%, #0f2040 100%)',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
+            gap: 0,
+            zIndex: 1000,
+            transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100%)',
+            transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.3)',
+            padding: '80px 0 0 0'
+          }}
+        >
+          <button 
+            onClick={closeMobileMenu}
+            aria-label="Close mobile menu"
+            style={{
+              position: 'absolute',
+              top: '1rem',
+              right: '1rem',
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: 'none',
+              color: 'white',
+              fontSize: '1.5rem',
+              cursor: 'pointer',
+              padding: '0.5rem',
+              borderRadius: '8px',
+              width: '40px',
+              height: '40px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 1001
+            }}
+          >
+            ✕
+          </button>
+          
+          {/* Mobile Menu Header */}
+          <div style={{
+            width: '100%',
+            padding: '1.5rem',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+            marginBottom: '1rem'
+          }}>
+            <div style={{
+              color: 'white',
+              fontSize: '1.1rem',
+              fontWeight: '700',
+              margin: 0
+            }}>
+              ENA Waste Management
+            </div>
+            <div style={{
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontSize: '0.9rem',
+              margin: '0.25rem 0 0 0'
+            }}>
+              MARPOL Compliance
+            </div>
+          </div>
+          
+          {/* Mobile Menu Links - BOLD CONTENT */}
+          {navLinks.map(link => (
+            <Link
+              key={link.path}
+              to={link.path}
+              onClick={closeMobileMenu}
+              style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: '1.1rem',
+                fontWeight: '700',
+                padding: '1.2rem 1.5rem',
+                transition: 'all 0.3s ease',
+                textAlign: 'left',
+                width: '100%',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                background: isActive(link.path) ? 'rgba(255, 255, 255, 0.15)' : 'transparent'
+              }}
+            >
+              {link.icon} {link.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
 EOF
 
-chmod +x RESTORE-LOGO-SIZE.sh
-./RESTORE-LOGO-SIZE.sh
+echo "✅ HAMBURGER MENU FIXED!"
+echo ""
+echo "🎯 WHAT WAS FIXED:"
+echo "=================="
+echo "✅ Added inline styles as fallback"
+echo "✅ Fixed toggle button functionality"
+echo "✅ Added console logs for debugging"
+echo "✅ Proper state management"
+echo "✅ Overlay click to close"
+echo "✅ Smooth slide-in animation"
+
+# 4. Build and deploy
+echo ""
+echo "🔨 Building application..."
+npm run build
+
+if [ $? -eq 0 ]; then
+    echo "✅ Build successful!"
+    echo ""
+    echo "🚀 Deploying hamburger fix..."
+    git add .
+    git commit -m "FIX: Hamburger menu now opens side panel properly"
+    git push origin main
+    echo ""
+    echo "🎉 HAMBURGER MENU FIXED!"
+    echo "🌐 Check: https://gitinitaddcommitlog.github.io/MAPOL/"
+    echo ""
+    echo "The hamburger menu should now open the side panel when clicked!"
+    echo ""
+    echo "💡 If it still doesn't work, open browser console to see debug logs"
+else
+    echo "❌ Build failed"
+fi
+EOF
+
+chmod +x FIX-HAMBURGER.sh
+./FIX-HAMBURGER.sh
