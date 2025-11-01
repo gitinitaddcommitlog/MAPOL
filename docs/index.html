@@ -4,18 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MARPOL Waste Management System</title>
-    <script type="importmap">
-    {
-        "imports": {
-            "react": "https://esm.sh/react@18",
-            "react-dom/client": "https://esm.sh/react-dom@18/client",
-            "react-router-dom": "https://esm.sh/react-router-dom",
-            "three": "https://esm.sh/three",
-            "@react-three/fiber": "https://esm.sh/@react-three/fiber",
-            "@react-three/drei": "https://esm.sh/@react-three/drei"
-        }
-    }
-    </script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/@react-three/fiber@8.15.11/dist/react-three-fiber.umd.js"></script>
+    <script src="https://unpkg.com/@react-three/drei@9.85.0/dist/drei.umd.js"></script>
     <style>
         * {
             margin: 0;
@@ -34,6 +28,68 @@
             min-height: 100vh;
         }
         
+        /* Header Styles */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-3d {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        
+        .nav a:hover, .nav a.active {
+            background: rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Page Styles */
+        .page {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
         .loading {
             display: flex;
             justify-content: center;
@@ -50,80 +106,239 @@
         </div>
     </div>
 
-    <script type="module">
-        import React from 'react';
-        import { createRoot } from 'react-dom/client';
-        import { BrowserRouter, Routes, Route } from 'react-router-dom';
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
         
-        // Import your existing components
-        const modules = {};
-        
-        // Dynamic import function
-        async function loadComponent(componentPath) {
-            if (!modules[componentPath]) {
-                try {
-                    const module = await import(componentPath);
-                    modules[componentPath] = module.default || module;
-                } catch (error) {
-                    console.error('Failed to load component:', componentPath, error);
-                    return () => React.createElement('div', null, `Failed to load ${componentPath}`);
-                }
-            }
-            return modules[componentPath];
+        // Simple 3D Cube as fallback (no GLB dependency)
+        function Simple3DLogo() {
+            const meshRef = useRef();
+            
+            React.useEffect(() => {
+                const animate = () => {
+                    if (meshRef.current) {
+                        meshRef.current.rotation.y += 0.01;
+                    }
+                    requestAnimationFrame(animate);
+                };
+                animate();
+            }, []);
+            
+            return React.createElement('mesh', { ref: meshRef },
+                React.createElement('boxGeometry', { args: [1, 1, 1] }),
+                React.createElement('meshStandardMaterial', { color: "#3B82F6" })
+            );
         }
-        
-        // Lazy loaded components
-        const Header = React.lazy(() => loadComponent('./app/components/layout/Header.js'));
-        const Dashboard = React.lazy(() => loadComponent('./app/pages/dashboard/Dashboard.js'));
-        const MainForm = React.lazy(() => loadComponent('./app/pages/forms/MainForm.js'));
-        const Reports = React.lazy(() => loadComponent('./app/pages/reports/Reports.js'));
-        
-        function App() {
-            return React.createElement(
-                BrowserRouter,
-                null,
-                React.createElement(
-                    React.Suspense,
-                    { 
-                        fallback: React.createElement('div', { className: 'loading' }, 'Loading MARPOL Application...') 
-                    },
-                    React.createElement(
-                        Routes,
-                        null,
-                        React.createElement(Route, { 
-                            path: '/', 
-                            element: React.createElement(
-                                React.Fragment,
-                                null,
-                                React.createElement(Header),
-                                React.createElement(Dashboard)
-                            )
-                        }),
-                        React.createElement(Route, { 
-                            path: '/forms', 
-                            element: React.createElement(
-                                React.Fragment,
-                                null,
-                                React.createElement(Header),
-                                React.createElement(MainForm)
-                            )
-                        }),
-                        React.createElement(Route, { 
-                            path: '/reports', 
-                            element: React.createElement(
-                                React.Fragment,
-                                null,
-                                React.createElement(Header),
-                                React.createElement(Reports)
-                            )
-                        })
+
+        // Header Component
+        function Header({ currentPage, onPageChange }) {
+            return React.createElement('header', { className: 'header' },
+                React.createElement('div', { className: 'logo-section' },
+                    React.createElement('div', { className: 'logo-3d' },
+                        React.createElement(ReactThreeFiber.Canvas, { 
+                            camera: { position: [3, 3, 3], fov: 45 } 
+                        },
+                            React.createElement('ambientLight', { intensity: 0.8 }),
+                            React.createElement(Simple3DLogo),
+                            React.createElement(window.DREI.OrbitControls, { 
+                                enableZoom: false, 
+                                enablePan: false 
+                            })
+                        )
+                    ),
+                    React.createElement('div', null,
+                        React.createElement('h1', { style: { margin: 0, fontSize: '1.5rem' } }, 'MARPOL Compliance Manager'),
+                        React.createElement('p', { style: { margin: 0, fontSize: '0.875rem', opacity: 0.8 } }, 'IMO Waste Management System')
+                    )
+                ),
+                React.createElement('nav', { className: 'nav' },
+                    React.createElement('a', {
+                        href: '#',
+                        className: currentPage === 'dashboard' ? 'active' : '',
+                        onClick: (e) => { e.preventDefault(); onPageChange('dashboard'); }
+                    }, 'Dashboard'),
+                    React.createElement('a', {
+                        href: '#', 
+                        className: currentPage === 'forms' ? 'active' : '',
+                        onClick: (e) => { e.preventDefault(); onPageChange('forms'); }
+                    }, 'Compliance Forms'),
+                    React.createElement('a', {
+                        href: '#',
+                        className: currentPage === 'reports' ? 'active' : '',
+                        onClick: (e) => { e.preventDefault(); onPageChange('reports'); }
+                    }, 'Waste Reports')
+                )
+            );
+        }
+
+        // Dashboard Page
+        function Dashboard() {
+            return React.createElement('div', { className: 'page' },
+                React.createElement('h1', null, 'Waste Management Dashboard'),
+                React.createElement('div', { className: 'dashboard-grid' },
+                    React.createElement('div', { className: 'card' },
+                        React.createElement('h3', null, 'Annex V - Plastic Waste'),
+                        React.createElement('p', { style: { fontSize: '2rem', fontWeight: 'bold', color: '#10B981' } }, '125 kg'),
+                        React.createElement('p', null, 'Monthly accumulation')
+                    ),
+                    React.createElement('div', { className: 'card' },
+                        React.createElement('h3', null, 'Compliance Score'),
+                        React.createElement('p', { style: { fontSize: '2rem', fontWeight: 'bold', color: '#3B82F6' } }, '92%'),
+                        React.createElement('p', null, 'Overall rating')
+                    ),
+                    React.createElement('div', { className: 'card' },
+                        React.createElement('h3', null, 'Vessels Tracked'),
+                        React.createElement('p', { style: { fontSize: '2rem', fontWeight: 'bold', color: '#F59E0B' } }, '47'),
+                        React.createElement('p', null, 'Active monitoring')
+                    )
+                ),
+                React.createElement('div', { className: 'card', style: { marginTop: '2rem' } },
+                    React.createElement('h2', null, '3D Visualization'),
+                    React.createElement('div', { style: { width: '100%', height: '400px', marginTop: '1rem' } },
+                        React.createElement(ReactThreeFiber.Canvas, { camera: { position: [5, 5, 5], fov: 50 } },
+                            React.createElement('ambientLight', { intensity: 0.6 }),
+                            React.createElement('spotLight', { position: [10, 10, 10], intensity: 1 }),
+                            React.createElement(Simple3DLogo),
+                            React.createElement(window.DREI.OrbitControls, { enableZoom: true })
+                        )
                     )
                 )
             );
         }
-        
-        const root = createRoot(document.getElementById('root'));
-        root.render(React.createElement(App));
+
+        // Forms Page
+        function Forms() {
+            const [formData, setFormData] = useState({
+                vesselName: '',
+                wasteType: 'plastic',
+                quantity: ''
+            });
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                alert(`Form submitted for ${formData.vesselName}\nWaste: ${formData.quantity}kg of ${formData.wasteType}`);
+            };
+
+            return React.createElement('div', { className: 'page' },
+                React.createElement('h1', null, 'MARPOL Compliance Forms'),
+                React.createElement('div', { className: 'card' },
+                    React.createElement('h2', null, 'Garbage Record Book (Annex V)'),
+                    React.createElement('form', { onSubmit: handleSubmit },
+                        React.createElement('div', { style: { display: 'grid', gap: '1rem', maxWidth: '500px' } },
+                            React.createElement('div', null,
+                                React.createElement('label', null, 'Vessel Name:'),
+                                React.createElement('input', {
+                                    type: 'text',
+                                    value: formData.vesselName,
+                                    onChange: (e) => setFormData({...formData, vesselName: e.target.value}),
+                                    style: { width: '100%', padding: '0.5rem', marginTop: '0.5rem' },
+                                    required: true
+                                })
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('label', null, 'Waste Type:'),
+                                React.createElement('select', {
+                                    value: formData.wasteType,
+                                    onChange: (e) => setFormData({...formData, wasteType: e.target.value}),
+                                    style: { width: '100%', padding: '0.5rem', marginTop: '0.5rem' }
+                                },
+                                    React.createElement('option', { value: 'plastic' }, 'Plastic'),
+                                    React.createElement('option', { value: 'oil' }, 'Oil'),
+                                    React.createElement('option', { value: 'chemical' }, 'Chemical')
+                                )
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('label', null, 'Quantity (kg):'),
+                                React.createElement('input', {
+                                    type: 'number',
+                                    value: formData.quantity,
+                                    onChange: (e) => setFormData({...formData, quantity: e.target.value}),
+                                    style: { width: '100%', padding: '0.5rem', marginTop: '0.5rem' },
+                                    required: true
+                                })
+                            ),
+                            React.createElement('button', {
+                                type: 'submit',
+                                style: {
+                                    background: '#3B82F6',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '1rem 2rem',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    marginTop: '1rem'
+                                }
+                            }, 'Submit Waste Report')
+                        )
+                    )
+                )
+            );
+        }
+
+        // Reports Page
+        function Reports() {
+            const [reports] = useState([
+                { id: 1, vessel: 'Ocean Guardian', type: 'Plastic', quantity: '125kg', date: '2024-01-15' },
+                { id: 2, vessel: 'Sea Explorer', type: 'Oil', quantity: '50L', date: '2024-01-14' },
+                { id: 3, vessel: 'Marine Protector', type: 'Chemical', quantity: '25kg', date: '2024-01-13' }
+            ]);
+
+            return React.createElement('div', { className: 'page' },
+                React.createElement('h1', null, 'Waste Management Reports'),
+                React.createElement('div', { className: 'card' },
+                    React.createElement('h2', null, 'Recent Waste Disposals'),
+                    React.createElement('div', { style: { marginTop: '1rem' } },
+                        reports.map(report => 
+                            React.createElement('div', {
+                                key: report.id,
+                                style: {
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    padding: '1rem',
+                                    borderBottom: '1px solid rgba(255,255,255,0.1)'
+                                }
+                            },
+                                React.createElement('div', null,
+                                    React.createElement('strong', null, report.vessel),
+                                    React.createElement('div', { style: { fontSize: '0.875rem', opacity: 0.8 } },
+                                        `${report.type} • ${report.quantity}`
+                                    )
+                                ),
+                                React.createElement('div', { style: { textAlign: 'right' } },
+                                    React.createElement('div', null, report.date)
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
+        // Main App Component
+        function App() {
+            const [currentPage, setCurrentPage] = useState('dashboard');
+
+            useEffect(() => {
+                console.log('MARPOL App loaded successfully!');
+            }, []);
+
+            const renderPage = () => {
+                switch (currentPage) {
+                    case 'dashboard': return React.createElement(Dashboard);
+                    case 'forms': return React.createElement(Forms);
+                    case 'reports': return React.createElement(Reports);
+                    default: return React.createElement(Dashboard);
+                }
+            };
+
+            return React.createElement('div', null,
+                React.createElement(Header, { currentPage, onPageChange: setCurrentPage }),
+                renderPage()
+            );
+        }
+
+        // Render the app
+        ReactDOM.render(React.createElement(App), document.getElementById('root'));
     </script>
 </body>
 </html>
